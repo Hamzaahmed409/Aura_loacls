@@ -1,0 +1,234 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  height: 100vh;
+  width: 100%;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 20 14.3% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 20 14.3% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 14.3% 4.1%;
+    --primary: 24.6 95% 53.1%;
+    --primary-foreground: 60 9.1% 97.8%;
+    --secondary: 60 4.8% 95.9%;
+    --secondary-foreground: 24 9.8% 10%;
+    --muted: 60 4.8% 95.9%;
+    --muted-foreground: 25 5.3% 44.7%;
+    --accent: 60 4.8% 95.9%;
+    --accent-foreground: 24 9.8% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 60 9.1% 97.8%;
+    --border: 20 5.9% 90%;
+    --input: 20 5.9% 90%;
+    --ring: 24.6 95% 53.1%;
+    --radius: 0.5rem;
+  }
+ 
+  .dark {
+    --background: 20 14.3% 4.1%;
+    --foreground: 60 9.1% 97.8%;
+    --card: 20 14.3% 4.1%;
+    --card-foreground: 60 9.1% 97.8%;
+    --popover: 20 14.3% 4.1%;
+    --popover-foreground: 60 9.1% 97.8%;
+    --primary: 20.5 90.2% 48.2%;
+    --primary-foreground: 60 9.1% 97.8%;
+    --secondary: 12 6.5% 15.1%;
+    --secondary-foreground: 60 9.1% 97.8%;
+    --muted: 12 6.5% 15.1%;
+    --muted-foreground: 24 5.4% 63.9%;
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 60 9.1% 97.8%;
+    --destructive: 0 72.2% 50.6%;
+    --destructive-foreground: 60 9.1% 97.8%;
+    --border: 12 6.5% 15.1%;
+    --input: 12 6.5% 15.1%;
+    --ring: 20.5 90.2% 48.2%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.nav-sidebar aside {
+  border: 0;
+}
+
+.nav-sidebar li a {
+  padding: 0 10px!important;
+}
+
+.timer-picker .ant-picker-input input::placeholder {
+  color: #D4D4D8;
+  font-weight: 400;
+}
+
+.timer-picker .ant-picker-input input {
+  color: #D4D4D8;
+  font-weight: 400;
+}
+
+.ant-picker-ok button {
+  color: #000!important;
+}
+
+.timer-picker span.anticon {
+  filter: invert(1);
+}
+
+.timer-picker .ant-picker-input:hover span.anticon {
+  filter:unset!important;
+  color:#fd9344!important;
+}
+
+.timer-picker .ant-picker-input span.ant-picker-clear {
+  background: unset!important;
+}
+
+.ant-picker:hover{
+  border-color:#fd9344!important;
+  border-width: 2px;
+
+}
+
+.ant-picker-focused.ant-picker{
+  border-color:#fd9344!important;
+  border-width: 2px;
+
+}
+
+.color-text{
+  color: #170F49;
+  
+}
+.color-primary{
+  color: #5465FF;
+}
+.color-secondary{
+  color: #404B7C;
+}
+
+.button{
+  background-color:#5465FF ;
+}
+.border-color{
+  border-color: #5465FF;
+}
+
+.background-color{
+  background-color: #F9F9FF;
+}
+.ant-picker-focused.ant-picker{
+  border-color: #404B7C !important;
+  border-width: 2px;
+}
+.ant-picker:hover{
+  border-color: #404B7C !important;
+  border-width: 2px;
+}
+.ant-picker-focused.ant-picker{
+  border-color: #404B7C !important;
+}
+.Dropdown-menu{
+  width: 64px;
+}
+.Dropdown-control{
+  border-radius: 10px;
+  height: 40px;
+  margin-top:8px;
+  border-width: 2px;
+  border-color: #E3E8EF ;
+}
+.Dropdown-placeholder is-selected{
+   padding-bottom: 10px;
+   
+}
+
+.file-upload {
+  padding: 0.3rem;
+  position: relative;
+  cursor: pointer;
+  height: 40px;
+  padding-left: 0.4rem;
+}
+.file-upload p {
+  font-size: 0.87rem;
+  margin-top: 10px;
+  color: #bbcada;
+}
+.file-upload input {
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.field-border-color{
+  border-color:#E3E8EF
+}
+.landing-bg-image{
+  background-image: url(/public/landingBg.svg);
+  height: 85%;
+}.lading-bottom-image{
+  background-image: url(/public/login.svg);
+}
+.react-international-phone-input-container{
+  /* width: 60%; */
+  border-width: 2px;
+  border-radius: 8px;
+  border-color: #E3E8EF;
+  /* hover  */
+}
+.react-international-phone-input-container .react-international-phone-input
+{
+  border: 0px;
+  padding: 5px;
+
+}
+.react-international-phone-input-container .react-international-phone-country-selector-button{
+  border: 0px;
+  padding: 5px;
+}
+.react-international-phone-country-selector-dropdown{
+  border: 0px;
+  padding: 5px;
+
+}
+/* #170F49 */
+
+/* #5465FF
+#5465FF
+#404B7C
+#404B7C */
+
+/* Define custom scrollbar styles */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #4f46e5; /* Change this to your desired scrollbar color */
+  border-radius: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #f0f0f0; /* Change this to your desired scrollbar track color */
+}
