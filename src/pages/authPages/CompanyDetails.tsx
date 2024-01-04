@@ -6,8 +6,9 @@ import 'react-dropdown/style.css';
 
 export default function CompanyDetails() {
     const navigate = useNavigate();
-    const [selectedFile, setSelectedFile] = useState(null);
-
+    const [companyDetials, setCompanyDetials] = useState(true);
+    const [bankDetials, setBankDetials] = useState(false);
+    const [representaativeDetials, setRepresentaativeDetials] = useState(false);
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file && file.type === 'application/pdf') {
@@ -17,10 +18,57 @@ export default function CompanyDetails() {
             alert('Please select a valid PDF file.');
         }
     };
-
     const options = [
         'AED', 'USD', 'EUR'
     ];
+    const annualTurnOver = [
+        '100,000-250,000',
+        '250,000-500,000',
+        '500,000-1,000,000'
+    ]
+    const categoryOption = [
+        ' Services - Consulting',
+        'Services - Education',
+        'Services - Financial Services',
+        'Services - Healthcare',
+        'Services - Hospitality',
+        'Services - Information Technology',
+        'Services - Legal Services',
+        'Services - Marketing and Advertising',
+        'Services - Real Estate',
+        'Services - Transportation',
+        'Trading - Automotive',
+        'Trading - Chemicals',
+        'Trading - Construction Material',
+        'Trading - Consumer Goods',
+        'Trading - Electronics',
+        'Trading - Food and Beverage',
+        'Trading - Furniture and Fixtures',
+        'Trading - Machinery and Equipment',
+        'Trading - Metals',
+        'Trading - Pharmaceuticals',
+        'Trading - Plastics and Rubber',
+        'Trading - Textiles & clothing',
+        'Trading - Wood and Timber',
+        'Manufacturing - Aerospace',
+        'Manufacturing - Agriculture',
+        'Manufacturing - Automotive',
+        'Manufacturing - Chemicals',
+        'Manufacturing - Construction',
+        'Manufacturing - Consumer Goods',
+        'Manufacturing - Electronics',
+        'Manufacturing - Energy',
+        'Manufacturing - Food and Beverage',
+        'Manufacturing - Furniture and Fixtures',
+        'Manufacturing - Machinery and Equipment',
+        'Manufacturing - Metals and Mining',
+        'Manufacturing - Paper and Packaging',
+        'Manufacturing - Pharmaceuticals',
+        'Manufacturing - Plastics and Rubber',
+        'Manufacturing - Shipbuilding',
+        'Manufacturing - Textiles & clothing',
+        'Manufacturing - Wood and Timber',
+    ]
     const defaultOption = options[0];
     return (
         <>
@@ -136,27 +184,23 @@ export default function CompanyDetails() {
                                 Annual turnover
                             </h3>
                             <div className=" sm: w-11/12  md:w-3/5 flex">
-                                <Dropdown options={options} className=" w-16" value={defaultOption} placeholder="Select an option" />;
-                                <input
-                                required
-                                    placeholder=" Input Amount"
-                                    className=" bg-white mt-2  text-slate-800 px-2  border-neutral-200 rounded-lg h-10 border-2   w-full " type="text" />
-
+                                <Dropdown options={options} className="w-16" value={defaultOption} placeholder="Select an option" />;
+                                <Dropdown options={annualTurnOver} className=" h-10  w-full  " menuClassName='Dropdown-menu-view'
+                                    // value={annualTurnOver[0]} 
+                                    placeholder="Select an option" />;
                             </div>
-
                         </div>
 
                         <div>
                             <h3 className="  text-blue-900 text-lg">
                                 Category of business
                             </h3>
-                            <input
-                                placeholder=" Category"
-                                className=" bg-white mt-2  border-neutral-200 rounded-lg h-10 border-2  sm: w-11/12  md:w-3/5 " type="text" />
+                            <Dropdown options={categoryOption} className=" h-10 sm: w-11/12  md:w-3/5  " menuClassName='Dropdown-menu-view'
+                                value={categoryOption[0]}
+                                placeholder="Select an option" />;
                         </div>
 
                         <div className="bg-white">
-
                             <div className="flex w-full bg-white">
                                 <input type="checkbox" id="horns" name="horns" />
                                 <p className="  text-sm text-blue-950 px-4">

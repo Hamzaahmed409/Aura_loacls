@@ -112,7 +112,6 @@ body {
 
 .color-text{
   color: #170F49;
-  
 }
 .color-primary{
   color: #5465FF;
@@ -144,6 +143,9 @@ body {
 }
 .Dropdown-menu{
   width: 64px;
+}
+.Dropdown-menu-view{
+  width: 100%;
 }
 .Dropdown-control{
   border-radius: 10px;
