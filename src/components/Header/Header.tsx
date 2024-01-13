@@ -4,6 +4,7 @@ import * as Actions from '@/redux/actions/Actions'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+
 function Header(props: { logout: () => void; }) {
   const dispatch = useDispatch();
   const userAuthDetail = localStorage.getItem('auth');
@@ -21,7 +22,7 @@ function Header(props: { logout: () => void; }) {
       <div className='flex justify-between items-center h-20 container'>
         <div>
           <img
-            src="../../../../../public/AURA.png"
+            src ="/AURA.png"
             width={102}
             height={30}
             alt="Authentication"

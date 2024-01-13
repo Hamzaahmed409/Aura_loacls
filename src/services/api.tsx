@@ -120,3 +120,77 @@ export async function apiPatch(endPoint, onSuccess, onFailure, body, token) {
 
         });
 }
+
+
+
+export const signup = (data: any) => {
+    const url = `${IP}/auth/signup`
+    return new Promise((resolve, reject) => {
+        const headers = {
+            headers: {
+                Accept: "application/json",
+            },
+        };
+        axios
+            .post(url, data, headers)
+            .then((response) => {
+                resolve(response.data);
+            })
+            .catch((error) => {
+                if ("response" in error) {
+                    reject(error);
+                } else {
+                    reject(error.response);
+                }
+            });
+    });
+};
+
+
+export const login = (data: any) => {
+    const url = `${IP}/auth/login`
+    return new Promise((resolve, reject) => {
+        const headers = {
+            headers: {
+                Accept: "application/json",
+            },
+        };
+        axios
+            .post(url, data, headers)
+            .then((response) => {
+                resolve(response.data);
+            })
+            .catch((error) => {
+                if ("response" in error) {
+                    reject(error);
+                } else {
+                    reject(error.response);
+                }
+            });
+    });
+};
+
+
+export const verify = (data: any) => {
+    const url = `${IP}/auth/verify`
+    return new Promise((resolve, reject) => {
+        const headers = {
+            headers: {
+                Accept: "application/json",
+            },
+        };
+        axios
+            .post(url, data, headers)
+            .then((response) => {
+                resolve(response.data);
+            })
+            .catch((error) => {
+                if ("response" in error) {
+                    reject(error);
+                } else {
+                    reject(error.response);
+                }
+            });
+    });
+};
+

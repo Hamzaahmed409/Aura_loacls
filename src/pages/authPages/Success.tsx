@@ -9,7 +9,7 @@ export default function Success() {
           <div className="lg:col-span-1 px-6 md:px-10 lg:px-20 relative h-full flex-col bg-muted p-4 w-full md:p-10 bg-white lg:flex">
             <div className="block z-0">
               <img
-                src="../../../public/AURA.png"
+                src="/AURA.png"
                 width={100}
                 alt="Authentication"
                 className="hidden dark:block"
@@ -20,7 +20,7 @@ export default function Success() {
               <div className="text-center">
                 <div className="block z-0">
                   <img
-                    src="../../../public/success.png"
+                    src="/success.png"
                     width={656}
                     alt="Authentication"
                     className="hidden dark:block"

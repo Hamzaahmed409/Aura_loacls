@@ -6,15 +6,23 @@ import 'react-dropdown/style.css';
 
 export default function CompanyDetails() {
     const navigate = useNavigate();
-    const [companyDetials, setCompanyDetials] = useState(true);
-    const [bankDetials, setBankDetials] = useState(false);
-    const [representaativeDetials, setRepresentaativeDetials] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [details, setDetails] = useState({
+        companyName: '',
+        dateOfIncorporated: '',
+        turnover: '',
+        currency: '',
+        Category: ''
+    });
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file && file.type === 'application/pdf') {
             setSelectedFile(file);
+            localStorage.setItem('selectedFile', JSON.stringify({
+                file
+             }));
         } else {
-            // Handle invalid file type
             alert('Please select a valid PDF file.');
         }
     };
@@ -78,7 +86,7 @@ export default function CompanyDetails() {
                     <div className="absolute inset-0 bg-white " />
                     <div className="block z-0" >
                         <img
-                            src="../../../public/AURA.png"
+                            src="/AURA.png"
                             width={100}
                             alt="Authentication"
                             className="hidden dark:block "
@@ -121,7 +129,7 @@ export default function CompanyDetails() {
                     </div>
                     <div className="absolute left-10 bottom-0  bg-white block z-0 ">
                         <img
-                            src="../../../public/FrameReister.png"
+                            src="/FrameReister.png"
                             alt="Authentication"
                             width={900}
                         />
@@ -142,84 +150,126 @@ export default function CompanyDetails() {
 
                         </div>
 
-                        <div>
-                            <h3 className="  text-blue-900 text-lg">
-                                Company name
-                            </h3>
-                            <input
-                                placeholder=" Enter company name"
-                                required
-                                className=" bg-white mt-2  text-slate-800 px-2 field-border-color rounded-lg h-10 border-2 sm: w-11/12 md:w-3/5" type="text" />
-
-                        </div>
-                        <div>
-                            <h3 className="  text-blue-900 text-lg">
-                                Trade license number
-                            </h3>
-
-                            <div className="file-upload field-border-color rounded-lg h-10 border-neutral-200 border-2 sm: w-11/12 md:w-3/5 ">
-
+                        {/* <form  > */}
+                            <div>
+                                <h3 className="  text-blue-900 text-lg">
+                                    Company name
+                                </h3>
                                 <input
-                                    type="file"
-                                    accept=".pdf"
-                                    onChange={handleFileChange}
-                                    className="  "
-                                />
-                                <h3 className=" text-muted-foreground "> {selectedFile || "Click to upload pdf"}</h3>
+                                    onChange={(e) => {
+                                        setDetails(prevState => ({
+                                            ...prevState,
+                                            companyName: e.target.value,
+                                        }));
+                                    }}
+
+                                    placeholder=" Enter company name"
+
+                                    className=" bg-white mt-2  text-slate-800 px-2 field-border-color rounded-lg h-10 border-2 sm: w-11/12 md:w-3/5" type="text" />
+
+                            </div>
+                            <div>
+                                <h3 className="  text-blue-900 text-lg">
+                                    Trade license number
+                                </h3>
+
+                                <div className="file-upload field-border-color rounded-lg h-10 border-neutral-200 border-2 sm: w-11/12 md:w-3/5 ">
+
+                                    <input
+
+                                        type="file"
+                                        accept=".pdf"
+                                        onChange={handleFileChange}
+                                        className="  "
+                                    />
+                                    <h3 className=" text-muted-foreground "> {selectedFile?.name || "Click to upload pdf"}</h3>
+                                </div>
+
+
                             </div>
 
+                            <div>
+                                <h3 className="  text-blue-900 text-lg">
+                                    Date of incorporated
+                                </h3>
 
-                        </div>
+                                <DatePicker
+                                    onChange={(e: any) => {
+                                        setDetails(prevState => ({
+                                            ...prevState,
+                                            dateOfIncorporated: e,
+                                        }));
+                                    }}
+                                    className=" sm: w-11/12 md:w-3/5  field-border-color border-2 field-border-color h-10 " placeholder=" DD / MM / YYYYY" />
+                            </div>
 
-                        <div>
-                            <h3 className="  text-blue-900 text-lg">
-                                Date of incorporated
-                            </h3>
+                            <div>
+                                <h3 className="  text-blue-900 text-lg">
+                                    Annual turnover
+                                </h3>
+                                <div className=" sm: w-11/12  md:w-3/5 flex">
+                                    <Dropdown onChange={(e) => {
+                                        setDetails(prevState => ({
+                                            ...prevState,
+                                            currency: e.value,
+                                        }));
+                                    }} options={options} className="w-16" value={defaultOption} placeholder="Select an option" />;
+                                    <Dropdown options={annualTurnOver} className=" h-10  w-full  " menuClassName='Dropdown-menu-view'
+                                        // value={annualTurnOver[0]} 
+                                        onChange={(e) => {
+                                            setDetails(prevState => ({
+                                                ...prevState,
+                                                turnover: e.value,
+                                            }));
+                                        }}
+                                        placeholder="Select an option" />;
+                                </div>
+                            </div>
 
-                            <DatePicker className=" sm: w-11/12 md:w-3/5  field-border-color border-2 field-border-color h-10 " placeholder=" DD / MM / YYYYY" />
-                        </div>
-
-                        <div>
-                            <h3 className="  text-blue-900 text-lg">
-                                Annual turnover
-                            </h3>
-                            <div className=" sm: w-11/12  md:w-3/5 flex">
-                                <Dropdown options={options} className="w-16" value={defaultOption} placeholder="Select an option" />;
-                                <Dropdown options={annualTurnOver} className=" h-10  w-full  " menuClassName='Dropdown-menu-view'
-                                    // value={annualTurnOver[0]} 
+                            <div>
+                                <h3 className="  text-blue-900 text-lg">
+                                    Category of business
+                                </h3>
+                                <Dropdown options={categoryOption} className=" h-10 sm: w-11/12  md:w-3/5  " menuClassName='Dropdown-menu-view'
+                                    value={categoryOption[0]}
+                                    onChange={(e) => {
+                                        setDetails(prevState => ({
+                                            ...prevState,
+                                            Category: e.value,
+                                        }));
+                                    }}
                                     placeholder="Select an option" />;
                             </div>
-                        </div>
 
-                        <div>
-                            <h3 className="  text-blue-900 text-lg">
-                                Category of business
-                            </h3>
-                            <Dropdown options={categoryOption} className=" h-10 sm: w-11/12  md:w-3/5  " menuClassName='Dropdown-menu-view'
-                                value={categoryOption[0]}
-                                placeholder="Select an option" />;
-                        </div>
+                            <div className="bg-white">
+                                <div className="flex w-full bg-white">
+                                    <input
 
-                        <div className="bg-white">
-                            <div className="flex w-full bg-white">
-                                <input type="checkbox" id="horns" name="horns" />
-                                <p className="  text-sm text-blue-950 px-4">
-                                    I give my consent to Aura Networks FZ to pull my credit report from Al Etihad Credit Bureau
-                                </p>
+                                        type="checkbox" id="horns" name="horns" />
+                                    <p className="  text-sm text-blue-950 px-4">
+                                        I give my consent to Aura Networks FZ to pull my credit report from Al Etihad Credit Bureau
+                                    </p>
+                                </div>
                             </div>
-                        </div>
 
+                            <div className="flex  sm:w-3/6 md:w-3/5 items-center  justify-end">
+                                <button onClick={() => navigate(-1)} className="mx-8   self-center color-primary    ">
+                                    BACK
+                                </button>
+                                <button
+                                    // type='submit'
+                                    className=' justify-self-end w-40 items-center h-10  bg-slate-400  rounded-lg'
+                                    onClick={() => {
+                                        localStorage.setItem('companyDetails', JSON.stringify({
+                                           details,
+                                          
+                                        }));
+                                        navigate('/company-bank-details')
+                                    }}
+                                >COUNTINUE</button>
+                            </div>
 
-                        <div className="flex  sm:w-3/6 md:w-3/5 items-center  justify-end">
-                            <button onClick={() => navigate(-1)} className="mx-8   self-center color-primary    ">
-                                BACK
-                            </button>
-                            <button className=' justify-self-end     w-40 items-center h-10  bg-slate-400  rounded-lg' onClick={() => {
-                                navigate('/company-bank-details')
-                            }}>COUNTINUE</button>
-                        </div>
-
-
+                        {/* </form> */}
                     </div>
 
                 </div>

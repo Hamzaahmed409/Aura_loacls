@@ -14,7 +14,7 @@ export default function AuthRouter() {
       <Routes>
       <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/CompanyDetails" element={<CompanyDetails />} />
+        <Route path="/company-details" element={<CompanyDetails />} />
         <Route path="/company-bank-details" element={<BankDetails />} />
         <Route path="/representative-details" element={<RepresentativeDetails />} />
         <Route path="/terms-&-conditions" element={<TermsAndConditions />} />

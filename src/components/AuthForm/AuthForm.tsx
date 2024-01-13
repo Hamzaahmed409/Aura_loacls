@@ -4,21 +4,23 @@ import { Button } from "@/components/ui/button"
 import Modal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { toast } from "@/components/ui/use-toast"
 import { connect, useDispatch } from 'react-redux';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
+import { login as loginApi, verify } from '@/services/api'
 import OTPInput from "otp-input-react";
 import { Link } from 'react-router-dom';
 function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; isDashboard: boolean; }) => void; }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [countryCode, setCountryCode] = useState('');
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [userDetails, setUserDetails]: any = useState({
   })
-
   const [isChecked, setChecked] = useState(false);
-
   const handleCheckboxChange = () => {
     setChecked(!isChecked);
   };
@@ -42,6 +44,101 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
     },
   };
 
+
+  async function onSubmit() {
+    setIsLoading(true)
+    if (phoneNumber && countryCode) {
+      const body = {
+        countryCode: countryCode,
+        mobileNumber: phoneNumber
+      }
+      loginApi(body).then((response: any) => {
+        if (response.success) {
+          setUserDetails(response.data)
+          setModalIsOpen(true)
+          toast({
+            variant: 'default',
+            title: "Logged in successfully",
+            description: "Welcome to monstro!",
+          })
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Something went wrong!",
+            description: "Please, Contact support.",
+          })
+        }
+      }).catch((error: { response: { data: { message: any; }; }; }) => {
+        setModalIsOpen(true)
+
+        toast({
+          variant: "destructive",
+          title: "Error!",
+          description: error.response.data.message,
+
+        })
+      }).finally(() => {
+        setIsLoading(false)
+      });
+    } else {
+      setIsLoading(false)
+      toast({
+        variant: "destructive",
+        title: "Something is missing!",
+        description: "Email, Password are required to login",
+      })
+    }
+  }
+
+
+
+  async function verifyOtp() { 
+    if (phoneNumber && countryCode) {
+      const body = {
+        countryCode: countryCode,
+        mobileNumber: phoneNumber,
+        otp :  OTP
+      }
+      console.log(body);
+      
+      verify(body).then((response: any) => {
+        if (response.success) {
+          setUserDetails(response.data)
+          setModalIsOpen(false)
+          toast({
+            variant: 'default',
+            title: "Logged in successfully",
+            description: "Welcome to monstro!",
+          })
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Something went wrong!",
+            description: "Please, Contact support.",
+          })
+        }
+      }).catch((error: { response: { data: { message: any; }; }; }) => {
+
+        toast({
+          variant: "destructive",
+          title: "Error!",
+          description: error.response.data.message,
+
+        })
+      }).finally(() => {
+        setIsLoading(false)
+      });
+    } else {
+      setIsLoading(false)
+      toast({
+        variant: "destructive",
+        title: "Something is missing!",
+        description: "Email, Password are required to login",
+      })
+    }
+  }
+
+
   const createUserSession = () => {
     localStorage.setItem('auth', JSON.stringify(userDetails));
     localStorage.setItem('isDashboard', JSON.stringify(false));
@@ -61,7 +158,10 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
           <PhoneInput
             country={'us'}
             value={phoneNumber}
-            onChange={phone => setPhoneNumber(phone)}
+            onChange={(phone, country  ) =>{ 
+              setCountryCode(country?.dialCode)
+              setPhoneNumber(phone)}
+            }
             placeholder='Enter phone number'
             dropdownStyle={{ color: 'black' }}
             inputStyle={{ color: 'black' }}
@@ -71,8 +171,7 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
         <div className="grid gap-3 my-2">
 
           <Button className=' w-40 h-10 bg-slate-400 rounded' onClick={() => {
-            setModalIsOpen(true)
-
+            onSubmit()
           }} disabled={isLoading}>
             {isLoading && (
               <FontAwesomeIcon className="mr-2 h-4 w-4" icon={faSpinner} spin />
@@ -99,7 +198,7 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
           }} className='absolute top-6 text-2xl right-8 text-black'>
      
       <img
-                src=" ../../../../../public/close.png"
+                src="/public/close.png"
                 width={16}
                 height={18}
                 alt="Authentication"
@@ -134,7 +233,9 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
               </Link>
             </p>
 
-            <button className='self-center w-10/12 items-center h-10 button rounded-lg mt-8'>VERIFY</button>
+            <button onClick={()=>{
+              verifyOtp()
+            }} className='self-center w-10/12 items-center h-10 button rounded-lg mt-8'>VERIFY</button>
           </div>
         </div>
       </Modal>

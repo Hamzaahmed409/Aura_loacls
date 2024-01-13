@@ -2,17 +2,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import 'react-dropdown/style.css';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 export default function CompanyDetails() {
     const navigate = useNavigate();
+    const [bankDetails, setBankDetails] = useState({
+        bankName: '',
+        iban: '',
+        accountNumber: '',
+       
+    });
+
     return (
         <>
             <div className="container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-3 lg:px-0 h-screen max-md:flex bg-slate-50">
-
                 <div className="lg:col-span-1 px-6 md:px-10 lg:px-20 relative hidden h-full flex-col bg-muted p-4 md:p-10 text-white lg:flex">
                     <div className="absolute inset-0 bg-white " />
                     <div className="block z-0" >
                         <img
-                            src="../../../public/AURA.png"
+                            src="/AURA.png"
                             width={100}
                             alt="Authentication"
                             className="hidden dark:block "
@@ -56,14 +63,13 @@ export default function CompanyDetails() {
                     </div>
                     <div className="absolute left-10 bottom-0  bg-white block z-0 ">
                         <img
-                            src="../../../public/FrameReister.png"
+                            src="/FrameReister.png"
                             alt="Authentication"
                             width={900}
                         />
                     </div>
                 </div>
                 <div className="lg:col-span-2 w-full items-center justify-center background-color h-full">
-
                     <div className="flex w-full flex-col py-6 md:py-16 px-4 md:px-10 lg:px-20 justify-center space-y-6">
                         <div>
                             <h1 className="block z-0  text-blue-900 text-2xl font-semibold">
@@ -72,26 +78,34 @@ export default function CompanyDetails() {
                             <p className=" mt-2 text-blue-900 text-sm" >
                                 You will recive payment in bank account
                             </p>
-
                         </div>
-
                         <div>
                             <h3 className="  text-blue-900 text-lg">
                                 Bank name
                             </h3>
                             <input
+                              onChange={(e) => {
+                                setBankDetails(prevState => ({
+                                    ...prevState,
+                                    bankDetails: e.target.value,
+                                }));
+                            }}
                                 placeholder=" Enter bank name"
                                 required
                                 className=" bg-white mt-2  text-slate-800 px-2  field-border-color rounded-lg h-10 border-2 sm: w-11/12 md:w-3/5" type="text" />
 
                         </div>
-
-
                         <div>
                             <h3 className="  text-blue-900 text-lg">
                                 IBAN
                             </h3>
                             <input
+                             onChange={(e) => {
+                                setBankDetails(prevState => ({
+                                    ...prevState,
+                                    iban: e.target.value,
+                                }));
+                            }}
                                 placeholder=" Input bank IBAN"
                                 required
                                 className=" bg-white mt-2  text-slate-800 px-2 border-neutral-200 rounded-lg h-10 border-2  sm: w-11/12  md:w-3/5 " type="text" />
@@ -102,6 +116,12 @@ export default function CompanyDetails() {
                                 Account number
                             </h3>
                             <input
+                              onChange={(e) => {
+                                setBankDetails(prevState => ({
+                                    ...prevState,
+                                    accountNumber: e.target.value,
+                                }));
+                            }}
                                 placeholder=" Input your company account number"
                                 required
                                 className=" bg-white mt-2  text-slate-800 px-2 border-neutral-200 rounded-lg h-10 border-2  sm: w-11/12  md:w-3/5 " type="text" />
@@ -120,6 +140,10 @@ export default function CompanyDetails() {
                                 BACK
                             </button>
                             <button onClick={() => {
+                                  localStorage.setItem('bankDetails', JSON.stringify({
+                                    bankDetails,
+                                   
+                                 }));
                                 navigate('/representative-details')
                             }} className='justify-self-end  w-40 items-center h-10  bg-slate-400  rounded-lg' >COUNTINUE</button>
                         </div>

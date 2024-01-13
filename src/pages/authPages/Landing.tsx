@@ -1,6 +1,5 @@
 import Header from '@/components/Header/Header'
 import { Button } from '@/components/ui/button'
-
 export default function Landing() {
     return (
         
@@ -11,7 +10,7 @@ export default function Landing() {
             <div className='flex flex-col items-center justify-center container landing-bg-image'>
                 <div className='mb-2'>
                     <img
-                        src="../../../../../public/AURA.png"
+                        src="/AURA.png"
                         width={172}
                         height={48}
                         alt="Authentication"
@@ -37,7 +36,7 @@ export default function Landing() {
             </div>
             <div className='bg-white w-screen'>
             <img
-                            src="../../../public/login.svg"
+                            src="/login.svg"
                             alt="Authentication"
                             className=' w-screen'
                         />

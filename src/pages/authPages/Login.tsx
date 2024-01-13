@@ -11,7 +11,7 @@ export default function Login() {
           <div className="absolute inset-0 bg-white " />
           <div className="block z-0" >
             <img
-              src="../../../public/Frame.png"
+              src="/Frame.png"
               width={500}
               // height={500}
               alt="Authentication"
@@ -25,7 +25,7 @@ export default function Login() {
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col    ">
               <img
-                src=" ../../../../../public/AURA.png"
+                src="/AURA.png"
                 width={172}
                 height={48}
                 alt="Authentication"
@@ -41,7 +41,7 @@ export default function Login() {
             Don't have an account
               < button
               onClick={()=>{
-                navigate('/CompanyDetails')
+                navigate('/company-details')
               } }
                 className="text-blue-900"
                 // className="underline underline-offset-4 hover:text-primary"

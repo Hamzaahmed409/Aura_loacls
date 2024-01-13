@@ -19,7 +19,7 @@ export default function TermsAndConditions() {
                     <div className="absolute inset-0 bg-white " />
                     <div className="block z-0" >
                         <img
-                            src="../../../public/AURA.png"
+                            src="/AURA.png"
                             width={100}
                             alt="Authentication"
                             className="hidden dark:block "
@@ -61,7 +61,7 @@ export default function TermsAndConditions() {
                     </div>
                     <div className="absolute left-10 bottom-0  bg-white block z-0 ">
                         <img
-                            src="../../../public/FrameReister.png"
+                            src="/FrameReister.png"
                             alt="Authentication"
                             width={900}
                         />
