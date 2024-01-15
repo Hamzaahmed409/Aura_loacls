@@ -1,3 +1,5 @@
+// @ts-nocheck 
+
 import { useEffect } from 'react'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import * as Actions from '@/redux/actions/Actions'

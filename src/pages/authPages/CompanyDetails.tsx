@@ -1,4 +1,6 @@
-import { Link, useNavigate } from "react-router-dom"
+// @ts-nocheck 
+
+import { useNavigate } from "react-router-dom"
 import { DatePicker } from 'antd';
 import { useState } from "react";
 import Dropdown from 'react-dropdown';

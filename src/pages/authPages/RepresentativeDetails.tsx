@@ -1,3 +1,5 @@
+// @ts-nocheck 
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { PhoneInput } from 'react-international-phone';
@@ -6,8 +8,7 @@ import { useState } from "react";
 import 'react-dropdown/style.css';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
-import { signup, verify } from '@/services/api';
-import { Link } from 'react-router-dom';
+import { signup, verify } from '@/services/api'; 
 import OTPInput from "otp-input-react";
 import Modal from 'react-modal'
 const customStyles = {

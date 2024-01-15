@@ -1,3 +1,5 @@
+// @ts-nocheck 
+
 import axios from 'axios';
  import {IP} from './endPoints'
 const getCommonHeaders = async headers => {

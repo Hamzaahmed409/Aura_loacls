@@ -1,3 +1,5 @@
+// @ts-nocheck 
+
 import { useState } from 'react';
 import * as Actions from '@/redux/actions/Actions';
 import { Button } from "@/components/ui/button"

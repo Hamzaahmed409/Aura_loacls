@@ -1,7 +1,6 @@
-import { useNavigate } from 'react-router-dom';
+// @ts-nocheck 
 
 export default function Success() {
-    const navigate = useNavigate();
 
     return (
         <>

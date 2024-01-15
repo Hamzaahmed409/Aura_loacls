@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import { PhoneInput } from 'react-international-phone';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'; 
 import 'react-international-phone/style.css';
 import { useState } from "react";
 import 'react-dropdown/style.css';
