@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 export default function CompanyDetails() {
     const navigate = useNavigate();
+    const [selectedFile, setSelectedFile] = useState(null);
     const [bankDetails, setBankDetails] = useState({
         bankName: '',
         iban: '',
@@ -12,6 +13,17 @@ export default function CompanyDetails() {
        
     });
 
+     const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file && file.type === 'application/pdf') {
+            setSelectedFile(file);
+            localStorage.setItem('selectedFile', JSON.stringify({
+                file
+             }));
+        } else {
+            alert('Please select a valid PDF file.');
+        }
+    };
     return (
         <>
             <div className="container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-3 lg:px-0 h-screen max-md:flex bg-slate-50">
@@ -127,6 +139,25 @@ export default function CompanyDetails() {
                                 className=" bg-white mt-2  text-slate-800 px-2 border-neutral-200 rounded-lg h-10 border-2  sm: w-11/12  md:w-3/5 " type="text" />
                         </div>
 
+                        <div>
+                                <h3 className="  text-blue-900 text-lg">
+                                   Bank statment
+                                </h3>
+
+                                <div className="file-upload field-border-color rounded-lg h-10 border-neutral-200 border-2 sm: w-11/12 md:w-3/5 ">
+
+                                    <input
+
+                                        type="file"
+                                        accept=".pdf"
+                                        onChange={handleFileChange}
+                                        className="  "
+                                    />
+                                    <h3 className=" text-muted-foreground "> {selectedFile?.name || "Click to upload pdf"}</h3>
+                                </div>
+
+
+                            </div>
 
                         <div className=" flex">
                             <input type="checkbox" id="horns" name="horns" />
