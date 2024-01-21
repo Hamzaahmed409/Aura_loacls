@@ -1,28 +1,36 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faFile } from '@fortawesome/free-solid-svg-icons';
 import 'react-dropdown/style.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 export default function CompanyDetails() {
     const navigate = useNavigate();
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedFile, setSelectedFile] = useState([]);
     const [bankDetails, setBankDetails] = useState({
         bankName: '',
         iban: '',
         accountNumber: '',
-       
-    });
 
-     const handleFileChange = (e) => {
+    });
+    console.log(selectedFile);
+    const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file && file.type === 'application/pdf') {
-            setSelectedFile(file);
-            localStorage.setItem('selectedFile', JSON.stringify({
-                file
-             }));
+            setSelectedFile([...selectedFile, file]);
+            // localStorage.setItem('selectedFile', JSON.stringify({
+            //     file
+            // }));
         } else {
             alert('Please select a valid PDF file.');
         }
+        // if (file && file.type === 'application/pdf') {
+        //     setSelectedFile(file);
+        //     localStorage.setItem('selectedFile', JSON.stringify({
+        //         file
+        //      }));
+        // } else {
+        //     alert('Please select a valid PDF file.');
+        // }
     };
     return (
         <>
@@ -96,12 +104,12 @@ export default function CompanyDetails() {
                                 Bank name
                             </h3>
                             <input
-                              onChange={(e) => {
-                                setBankDetails(prevState => ({
-                                    ...prevState,
-                                    bankDetails: e.target.value,
-                                }));
-                            }}
+                                onChange={(e) => {
+                                    setBankDetails(prevState => ({
+                                        ...prevState,
+                                        bankDetails: e.target.value,
+                                    }));
+                                }}
                                 placeholder=" Enter bank name"
                                 required
                                 className=" bg-white mt-2  text-slate-800 px-2  field-border-color rounded-lg h-10 border-2 sm: w-11/12 md:w-3/5" type="text" />
@@ -112,12 +120,12 @@ export default function CompanyDetails() {
                                 IBAN
                             </h3>
                             <input
-                             onChange={(e) => {
-                                setBankDetails(prevState => ({
-                                    ...prevState,
-                                    iban: e.target.value,
-                                }));
-                            }}
+                                onChange={(e) => {
+                                    setBankDetails(prevState => ({
+                                        ...prevState,
+                                        iban: e.target.value,
+                                    }));
+                                }}
                                 placeholder=" Input bank IBAN"
                                 required
                                 className=" bg-white mt-2  text-slate-800 px-2 border-neutral-200 rounded-lg h-10 border-2  sm: w-11/12  md:w-3/5 " type="text" />
@@ -128,36 +136,59 @@ export default function CompanyDetails() {
                                 Account number
                             </h3>
                             <input
-                              onChange={(e) => {
-                                setBankDetails(prevState => ({
-                                    ...prevState,
-                                    accountNumber: e.target.value,
-                                }));
-                            }}
+                                onChange={(e) => {
+                                    setBankDetails(prevState => ({
+                                        ...prevState,
+                                        accountNumber: e.target.value,
+                                    }));
+                                }}
                                 placeholder=" Input your company account number"
                                 required
                                 className=" bg-white mt-2  text-slate-800 px-2 border-neutral-200 rounded-lg h-10 border-2  sm: w-11/12  md:w-3/5 " type="text" />
                         </div>
 
                         <div>
-                                <h3 className="  text-blue-900 text-lg">
-                                   Bank statment
-                                </h3>
+                            <h3 className="  text-blue-900 text-lg">
+                                Bank statment
+                            </h3>
 
-                                <div className="file-upload field-border-color rounded-lg h-10 border-neutral-200 border-2 sm: w-11/12 md:w-3/5 ">
+                            <div className=' flex w-1/2'>
+                                <div className=' flex' >
+                                    {
+                                        selectedFile.map((e) => {
+                                            return (
+                                                <div className="file-upload field-border-color rounded-lg h-32 border-neutral-200 border-2 w-36 p-2 flex items-center justify-center m-2">
+                                                    <FontAwesomeIcon className="mr-2 h-8 color-primary" icon={faFile} />
+                                                    <h3 className="color-primary">
+                                                        {e.name.length > 10 ? e.name.substring(0, 15) + '...' : e.name}
+                                                    </h3>
+                                                </div>
 
-                                    <input
 
-                                        type="file"
-                                        accept=".pdf"
-                                        onChange={handleFileChange}
-                                        className="  "
-                                    />
-                                    <h3 className=" text-muted-foreground "> {selectedFile?.name || "Click to upload pdf"}</h3>
+                                            )
+                                        })
+                                    }
                                 </div>
+
+                                {
+                                    selectedFile.length < 6 ?
+                                        <div className="file-upload field-border-color rounded-lg h-32 border-neutral-200 border-2  w-36 text-center m-2">
+                                            <input
+                                                type="file"
+                                                accept=".pdf"
+                                                onChange={handleFileChange}
+                                                className="  "
+                                            />
+                                            {/* <h3 className=" text-muted-foreground mt-10 "> {selectedFile?.name || "Click to upload pdf"}</h3> */}
+                                            <h3 className=" text-muted-foreground mt-10 ">Click to upload pdf</h3>
+                                        </div> : null
+                                }
+
 
 
                             </div>
+
+                        </div>
 
                         <div className=" flex">
                             <input type="checkbox" id="horns" name="horns" />
@@ -171,10 +202,10 @@ export default function CompanyDetails() {
                                 BACK
                             </button>
                             <button onClick={() => {
-                                  localStorage.setItem('bankDetails', JSON.stringify({
+                                localStorage.setItem('bankDetails', JSON.stringify({
                                     bankDetails,
-                                   
-                                 }));
+
+                                }));
                                 navigate('/representative-details')
                             }} className='justify-self-end  w-40 items-center h-10  bg-slate-400  rounded-lg' >COUNTINUE</button>
                         </div>
