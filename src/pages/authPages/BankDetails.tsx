@@ -131,7 +131,7 @@ export default function CompanyDetails() {
                                 className=" bg-white mt-2  text-slate-800 px-2 border-neutral-200 rounded-lg h-10 border-2  sm: w-11/12  md:w-3/5 " type="text" />
                         </div>
 
-                        <div>
+                        {/* <div>
                             <h3 className="  text-blue-900 text-lg">
                                 Account number
                             </h3>
@@ -145,19 +145,19 @@ export default function CompanyDetails() {
                                 placeholder=" Input your company account number"
                                 required
                                 className=" bg-white mt-2  text-slate-800 px-2 border-neutral-200 rounded-lg h-10 border-2  sm: w-11/12  md:w-3/5 " type="text" />
-                        </div>
+                        </div> */}
 
                         <div>
                             <h3 className="  text-blue-900 text-lg">
                                 Bank statment
                             </h3>
 
-                            <div className=' flex w-1/2'>
-                                <div className=' flex' >
+                            <div className='flex-wrap flex  '>
+                                <div className=' flex-wrap flex' >
                                     {
                                         selectedFile.map((e) => {
                                             return (
-                                                <div className="file-upload field-border-color rounded-lg h-32 border-neutral-200 border-2 w-36 p-2 flex items-center justify-center m-2">
+                                                <div className="file-upload field-border-color rounded-lg h-32 border-neutral-200 border-2 w-36 p-2 flex  items-center justify-center m-2">
                                                     <FontAwesomeIcon className="mr-2 h-8 color-primary" icon={faFile} />
                                                     <h3 className="color-primary">
                                                         {e.name.length > 10 ? e.name.substring(0, 15) + '...' : e.name}
@@ -172,14 +172,13 @@ export default function CompanyDetails() {
 
                                 {
                                     selectedFile.length < 6 ?
-                                        <div className="file-upload field-border-color rounded-lg h-32 border-neutral-200 border-2  w-36 text-center m-2">
+                                        <div className="file-upload field-border-color rounded-lg h-32 flex-wrap border-neutral-200 border-2  w-36 text-center m-2">
                                             <input
                                                 type="file"
                                                 accept=".pdf"
                                                 onChange={handleFileChange}
                                                 className="  "
                                             />
-                                            {/* <h3 className=" text-muted-foreground mt-10 "> {selectedFile?.name || "Click to upload pdf"}</h3> */}
                                             <h3 className=" text-muted-foreground mt-10 ">Click to upload pdf</h3>
                                         </div> : null
                                 }
@@ -188,13 +187,6 @@ export default function CompanyDetails() {
 
                             </div>
 
-                        </div>
-
-                        <div className=" flex">
-                            <input type="checkbox" id="horns" name="horns" />
-                            <p className="  text-sm text-blue-950 px-4">
-                                I give my consent to Aura Networks FZ to pull my credit report from Al Etihad Credit Bureau
-                            </p>
                         </div>
 
                         <div className="flex  sm:w-3/6 md:w-3/5 items-center  justify-end">

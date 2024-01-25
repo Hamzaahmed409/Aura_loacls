@@ -256,8 +256,8 @@ export default function CompanyDetails() {
                                 className=" bg-white mt-2  text-slate-800 px-2 field-border-color rounded-lg h-10 border-2  sm: w-11/12 md:w-3/5" type="text" />
                         </div>
                         <div>
-                            <h3 className="  text-blue-900 text-lg">
-                                Phone
+                            <h3 className="  text-blue-900 text-lg flex">
+                                Phone  <p className=' text-slate-500 text-sm mt-1 font-normal ml-2 '>(Use for Login)</p>
                             </h3>
                             <PhoneInput
                                 defaultCountry="ae"
