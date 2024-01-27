@@ -2,15 +2,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faFile } from '@fortawesome/free-solid-svg-icons';
 import 'react-dropdown/style.css';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { toast } from "@/components/ui/use-toast"
+import { useEffect, useState } from 'react';
 export default function CompanyDetails() {
     const navigate = useNavigate();
+    const [statementCheck, setStatementCheck] = useState(false);
     const [selectedFile, setSelectedFile] = useState([]);
     const [bankDetails, setBankDetails] = useState({
         bankName: '',
         iban: '',
         accountNumber: '',
-
     });
     console.log(selectedFile);
     const handleFileChange = (e) => {
@@ -25,13 +26,50 @@ export default function CompanyDetails() {
         }
         // if (file && file.type === 'application/pdf') {
         //     setSelectedFile(file);
-        //     localStorage.setItem('selectedFile', JSON.stringify({
-        //         file
-        //      }));
+            // localStorage.setItem('selectedFile', JSON.stringify({
+            //     file
+            //  }));
         // } else {
         //     alert('Please select a valid PDF file.');
         // }
     };
+
+    useEffect(() => {
+        if (selectedFile.length == 6) {
+            pdfUpload()
+        }
+    }, [selectedFile])
+
+    const pdfUpload = () => {
+        var formdata = new FormData();
+        formdata.append("files", selectedFile[0], selectedFile[0]?.name);
+        formdata.append("files", selectedFile[1], selectedFile[1]?.name);
+        formdata.append("files", selectedFile[2], selectedFile[2]?.name);
+        formdata.append("files", selectedFile[3], selectedFile[3]?.name);
+        formdata.append("files", selectedFile[4], selectedFile[4]?.name);
+        formdata.append("files", selectedFile[5], selectedFile[5]?.name);
+
+        var requestOptions = {
+            method: 'POST',
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        fetch("http://ec2-54-165-34-171.compute-1.amazonaws.com:3000/api/auth/upload", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                const concatenatedUrls = result?.successfulUploads?.reduce((acc, item) => {
+                    return acc + item.url + '\n'; // '\n' for a line break between each URL
+                }, '');
+
+                localStorage.setItem('bankStatmentPdf', JSON.stringify({
+                    concatenatedUrls
+                 }));
+                 setStatementCheck(true)
+                console.log(concatenatedUrls);
+            })
+            .catch(error => console.log('error', error));
+    }
     return (
         <>
             <div className="container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-3 lg:px-0 h-screen max-md:flex bg-slate-50">
@@ -107,7 +145,7 @@ export default function CompanyDetails() {
                                 onChange={(e) => {
                                     setBankDetails(prevState => ({
                                         ...prevState,
-                                        bankDetails: e.target.value,
+                                        bankName: e.target.value,
                                     }));
                                 }}
                                 placeholder=" Enter bank name"
@@ -196,9 +234,18 @@ export default function CompanyDetails() {
                             <button onClick={() => {
                                 localStorage.setItem('bankDetails', JSON.stringify({
                                     bankDetails,
-
                                 }));
                                 navigate('/representative-details')
+
+                                // if(statementCheck){
+                                //     navigate('/representative-details')
+                                // }
+                                // else{
+                                //     toast({
+                                //         variant: 'default',
+                                //         title: "Please submit the pdfs first.",
+                                //       })
+                                // }
                             }} className='justify-self-end  w-40 items-center h-10  bg-slate-400  rounded-lg' >COUNTINUE</button>
                         </div>
                     </div>

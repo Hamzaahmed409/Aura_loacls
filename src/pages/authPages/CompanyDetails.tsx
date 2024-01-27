@@ -5,9 +5,11 @@ import { DatePicker } from 'antd';
 import { useState } from "react";
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+import { toast } from "@/components/ui/use-toast"
 
 export default function CompanyDetails() {
     const navigate = useNavigate();
+    const [statementCheck, setStatementCheck] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [details, setDetails] = useState({
         companyName: '',
@@ -21,9 +23,10 @@ export default function CompanyDetails() {
         const file = e.target.files[0];
         if (file && file.type === 'application/pdf') {
             setSelectedFile(file);
-            localStorage.setItem('selectedFile', JSON.stringify({
-                file
-             }));
+            pdfUpload(file)
+            // localStorage.setItem('selectedFile', JSON.stringify({
+            //     file
+            //  }));
         } else {
             alert('Please select a valid PDF file.');
         }
@@ -80,6 +83,32 @@ export default function CompanyDetails() {
         'Manufacturing - Wood and Timber',
     ]
     const defaultOption = options[0];
+
+    const pdfUpload = (file) => {
+        var formdata = new FormData();
+        formdata.append("files", file,   file?.name);
+
+        var requestOptions = {
+            method: 'POST',
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        fetch("http://ec2-54-165-34-171.compute-1.amazonaws.com:3000/api/auth/upload", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                const concatenatedUrls = result?.successfulUploads?.reduce((acc, item) => {
+                    return acc + item.url + '\n'; // '\n' for a line break between each URL
+                }, '');
+
+                localStorage.setItem('tradeLicense', JSON.stringify({
+                    concatenatedUrls
+                 }));
+                 setStatementCheck(true)
+                console.log(concatenatedUrls);
+            })
+            .catch(error => console.log('error', error));
+    }
     return (
         <>
             <div className="container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-3 lg:px-0  xl:h-screen 2xl:h-screen  lg:h-screen md:h-screen sm:h-full  max-md:flex bg-slate-50 ">
@@ -266,7 +295,14 @@ export default function CompanyDetails() {
                                            details,
                                           
                                         }));
-                                        navigate('/company-bank-details')
+                                        if(statementCheck){
+                                            navigate('/company-bank-details')
+                                        }  else{
+                                            toast({
+                                                variant: 'default',
+                                                title: "Please submit the pdf first.",
+                                              })
+                                        }
                                     }}
                                 >COUNTINUE</button>
                             </div>

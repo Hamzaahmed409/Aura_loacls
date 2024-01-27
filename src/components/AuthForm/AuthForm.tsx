@@ -15,10 +15,10 @@ import OTPInput from "otp-input-react";
 import { Link } from 'react-router-dom';
 function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; isDashboard: boolean; }) => void; }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [countryCode, setCountryCode] = useState('');
-
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [userDetails, setUserDetails]: any = useState({
   })
@@ -72,7 +72,6 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
         }
       }).catch((error: { response: { data: { message: any; }; }; }) => {
         setModalIsOpen(true)
-
         toast({
           variant: "destructive",
           title: "Error!",
@@ -87,11 +86,10 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
       toast({
         variant: "destructive",
         title: "Something is missing!",
-        description: "Email, Password are required to login",
+        description: "PhoneNumber are required to login",
       })
     }
   }
-
 
 
   async function verifyOtp() { 
@@ -112,6 +110,8 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
             title: "Logged in successfully",
             description: "Welcome to monstro!",
           })
+          navigate('/dashBoard')
+
         } else {
           toast({
             variant: "destructive",

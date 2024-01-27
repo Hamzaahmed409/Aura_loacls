@@ -6,7 +6,7 @@ import BankDetails from "@/pages/authPages/BankDetails";
 import RepresentativeDetails from "@/pages/authPages/RepresentativeDetails";
 import TermsAndConditions from "@/pages/authPages/Terms&Condition";
 import Success from "@/pages/authPages/Success";
-
+import DashBoard from "@/pages/appPages/DashBoard";
 
 export default function AuthRouter() {
   return (
@@ -19,8 +19,7 @@ export default function AuthRouter() {
         <Route path="/representative-details" element={<RepresentativeDetails />} />
         <Route path="/terms-&-conditions" element={<TermsAndConditions />} />
         <Route path="/success" element={<Success />} />
-        
-        
+        <Route path="/dashBoard" element={<DashBoard />} />
       </Routes>
     </BrowserRouter>
   );

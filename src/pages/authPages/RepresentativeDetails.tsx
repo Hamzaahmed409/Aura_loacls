@@ -8,7 +8,7 @@ import { useState } from "react";
 import 'react-dropdown/style.css';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
-import { signup, verify } from '@/services/api'; 
+import { signup, verify } from '@/services/api';
 import OTPInput from "otp-input-react";
 import Modal from 'react-modal'
 const customStyles = {
@@ -47,26 +47,28 @@ export default function CompanyDetails() {
     bankDetails = JSON.parse(bankDetails)
     let companyDetails = localStorage.getItem('companyDetails');
     companyDetails = JSON.parse(companyDetails)
-
-
+    let bankStatmentPdf = localStorage.getItem('bankStatmentPdf');
+    bankStatmentPdf = JSON.parse(bankStatmentPdf)
+    let tradeLicense = localStorage.getItem('tradeLicense');
+    tradeLicense = JSON.parse(tradeLicense)
     async function onSubmit() {
         setIsLoading(true)
-        // if (phoneNumber && countryCode) {
         if (true) {
             const body = {
                 company_name: companyDetails.details.companyName,
-                trade_license_no: "123123",
+                trade_license_no: tradeLicense.concatenatedUrls,
                 "date_of_incorporation": companyDetails.details.dateOfIncorporated,
                 "annual_turnover": companyDetails.details.turnover,
                 "business_category": companyDetails.details.Category,
                 "credit_consent": true,
                 "bank_name": bankDetails.bankDetails.bankName,
                 "bank_iban": bankDetails.bankDetails.iban,
-                "bank_account_number": bankDetails.bankDetails.accountNumber,
+                "bank_account_number": '123123123',
                 "user_name": representativeDetails.fullName,
                 "user_email": representativeDetails.email,
                 "user_country_code": representativeDetails.phone,
-                "user_mobile_no": countryCode,
+                "user_mobile_no": representativeDetails.phone,
+                "bank_statement":bankStatmentPdf.concatenatedUrls,
                 "terms_and_cond_agreed": true
             }
             signup(body).then((response: any) => {
@@ -74,7 +76,7 @@ export default function CompanyDetails() {
                     setModalIsOpen(true)
                     toast({
                         variant: 'default',
-                        title: "Logged in successfully",
+                        title: "SignUp successfully",
                         description: "Welcome to monstro!",
                     })
                 } else {
@@ -330,7 +332,9 @@ export default function CompanyDetails() {
 
                         <button onClick={() => {
                             setModalIsOpen(false)
-                            verifyOtp()
+                            // verifyOtp()
+                            onSubmit()
+
                         }} className='self-center w-10/12 items-center h-10 button rounded-lg mt-8'>VERIFY</button>
                     </div>
                 </div>
