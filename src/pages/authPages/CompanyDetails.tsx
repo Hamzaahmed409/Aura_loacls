@@ -6,10 +6,13 @@ import { useState } from "react";
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import { toast } from "@/components/ui/use-toast"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck, faFile } from '@fortawesome/free-solid-svg-icons';
 
 export default function CompanyDetails() {
     const navigate = useNavigate();
     const [statementCheck, setStatementCheck] = useState(false);
+    const [concatenatedUrls, serConcatenatedUrls] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
     const [details, setDetails] = useState({
         companyName: '',
@@ -35,9 +38,11 @@ export default function CompanyDetails() {
         'AED', 'USD', 'EUR'
     ];
     const annualTurnOver = [
+        '<100,000',
         '100,000-250,000',
         '250,000-500,000',
-        '500,000-1,000,000'
+        '500,000-1,000,000',
+        '>1,000,000'
     ]
     const categoryOption = [
         ' Services - Consulting',
@@ -86,7 +91,7 @@ export default function CompanyDetails() {
 
     const pdfUpload = (file) => {
         var formdata = new FormData();
-        formdata.append("files", file,   file?.name);
+        formdata.append("files", file, file?.name);
 
         var requestOptions = {
             method: 'POST',
@@ -100,14 +105,78 @@ export default function CompanyDetails() {
                 const concatenatedUrls = result?.successfulUploads?.reduce((acc, item) => {
                     return acc + item.url + '\n'; // '\n' for a line break between each URL
                 }, '');
-
-                localStorage.setItem('tradeLicense', JSON.stringify({
-                    concatenatedUrls
-                 }));
-                 setStatementCheck(true)
-                console.log(concatenatedUrls);
+                serConcatenatedUrls(concatenatedUrls)
+                setStatementCheck(true)
             })
             .catch(error => console.log('error', error));
+    }
+
+    let bankDetails = localStorage.getItem('bankDetails');
+    bankDetails = JSON.parse(bankDetails)
+    let representativeDetails = localStorage.getItem('representativeDetails');
+    representativeDetails = JSON.parse(representativeDetails)
+    let bankStatmentPdf = localStorage.getItem('bankStatmentPdf');
+    bankStatmentPdf = JSON.parse(bankStatmentPdf)
+    let tradeLicense = localStorage.getItem('tradeLicense');
+    tradeLicense = JSON.parse(tradeLicense)
+    
+    async function onSubmit() {
+        setIsLoading(true)
+        if (true) {
+            const body = {
+                company_name: details.companyName,
+                trade_license_no: concatenatedUrls.concatenatedUrls,
+                "date_of_incorporation": details.dateOfIncorporated,
+                "annual_turnover": details.turnover,
+                "business_category": details.Category,
+                "credit_consent": true,
+                "bank_name": bankDetails.bankDetails.bankName,
+                "bank_iban": bankDetails.bankDetails.iban,
+                "bank_account_number": '123123123',
+                "user_name": representativeDetails.fullName,
+                "user_email": representativeDetails.email,
+                "user_country_code": representativeDetails.phone.slice(0, 4),
+                "user_mobile_no": representativeDetails.phone.slice(4),
+                "bank_statement": bankStatmentPdf.concatenatedUrls,
+                "terms_and_cond_agreed": true
+            }
+            signup(body).then((response: any) => {
+                console.log(response.user_id)
+                if (response.user_id) {
+                    setModalIsOpen(true)
+                    toast({
+                        variant: 'default',
+                        title: "SignUp successfully",
+                        description: "Welcome to AURA!",
+                    })
+                    navigate('/terms-&-conditions');
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: "Something went wrong!",
+                        description: "Please, Contact support.",
+                    })
+                }
+            }).catch((error: { response: { data: { message: any; }; }; }) => {
+                setModalIsOpen(true)
+
+                toast({
+                    variant: "destructive",
+                    title: "Error!",
+                    description: error.response.data.message,
+
+                })
+            }).finally(() => {
+                setIsLoading(false)
+            });
+        } else {
+            setIsLoading(false)
+            toast({
+                variant: "destructive",
+                title: "Something is missing!",
+                description: "Email, Password are required to login",
+            })
+        }
     }
     return (
         <>
@@ -125,27 +194,29 @@ export default function CompanyDetails() {
                     </div>
                     <div className="block z-0 my-20">
                         <div className="flex my-2 ">
-                            <div className="flex items-center justify-center rounded-full border-color color-primary border-2 w-6 px-3 mx-6">
-                                <h1 className="color-primary">1</h1>
+                            <div className="flex items-center justify-center rounded-full w-6 px-3 mx-6">
+                                <FontAwesomeIcon className='text-green-500 ' size='2x' icon={faCircleCheck} />
                             </div>
-                            <h1 className="color-primary font-semibold">COMPANY DETAILS</h1>
+                            <h1 className="color-primary font-semibold">REPRESENTATIVE DETAILS</h1>
                         </div>
-                        <div className="border-l border-gray-300 h-8 mx-9"></div>
+                        <div className="border-l border-green-500  h-8 mx-9"></div>
 
                         <div className="flex my-2 ">
-                            <div className="flex items-center justify-center rounded-full border-gray-300 text-blue-900 border-2 w-6 px-3 mx-6">
-                                <h1 className="text-muted-foreground">2</h1>
+                            <div className="flex items-center justify-center rounded-full w-6 px-3 mx-6">
+                                <FontAwesomeIcon className='text-green-500 ' size='2x' icon={faCircleCheck} />
                             </div>
                             {/* Vertical Line */}
                             <h1 className="color-secondary font-semibold">COMPANY BANK DETAILS</h1>
                         </div>
-                        <div className="border-l border-gray-300 h-8 mx-9"></div>
+
+                        <div className="border-l border-green-500  h-8 mx-9"></div>
+
                         <div className="flex my-2">
-                            <div className="flex items-center justify-center rounded-full border-gray-300 text-blue-900 border-2 w-6 px-3 mx-6">
-                                <h1 className="text-muted-foreground">3</h1>
+                            <div className="flex items-center justify-center rounded-full border-color color-primary border-2 w-8 h-8 px-3 mx-5">
+                                <h1 className="color-primary">3</h1>
                             </div>
                             {/* Vertical Line */}
-                            <h1 className="color-secondary font-semibold">REPRESENTATIVE DETAILS </h1>
+                            <h1 className="color-secondary font-semibold">COMPANY DETAILS </h1>
                         </div>
                         <div className="border-l border-gray-300 h-8  mx-9"></div>
 
@@ -167,26 +238,39 @@ export default function CompanyDetails() {
                     </div>
                 </div>
 
-
                 <div className="lg:col-span-2 w-full items-center justify-center background-color h-full">
 
                     <div className="flex w-full flex-col py-6 md:py-16 px-4 md:px-10 lg:px-20 justify-center space-y-6">
-                        <div>
-                            <h1 className="block z-0  text-blue-900 text-2xl font-semibold">
-                                Company Details
-                            </h1>
-                            <p className=" mt-2 text-blue-900 text-sm" >
-                                This details help us understand your business better
-                            </p>
+                        <form onSubmit={(e) => {
+                            e.preventDefault()
+                            if (selectedFile.length < 1 || details.dateOfIncorporated == '' || details.turnover == "" || details.Category == '') {
+                                toast({
+                                    variant: "destructive",
+                                    title: "Please fill the form first",
+                                })
+                            }
+                            else {
+                                onSubmit(true)
+                            }
+                        }}>
 
-                        </div>
+                            <div>
+                                <h1 className="block z-0  text-blue-900 text-2xl font-semibold">
+                                    Company Details
+                                </h1>
+                                <p className=" mt-2 text-blue-900 text-sm" >
+                                    This details help us understand your business better
+                                </p>
 
-                        {/* <form  > */}
+                            </div>
+
+                            {/* <form  > */}
                             <div>
                                 <h3 className="  text-blue-900 text-lg">
                                     Company name
                                 </h3>
                                 <input
+                                    required
                                     onChange={(e) => {
                                         setDetails(prevState => ({
                                             ...prevState,
@@ -195,19 +279,17 @@ export default function CompanyDetails() {
                                     }}
 
                                     placeholder=" Enter company name"
-
                                     className=" bg-white mt-2  text-slate-800 px-2 field-border-color rounded-lg h-10 border-2 sm: w-11/12 md:w-3/5" type="text" />
-
                             </div>
                             <div>
                                 <h3 className="  text-blue-900 text-lg">
-                                    Trade license number
+                                    Upload Trade License Number (.pdf only)
                                 </h3>
 
                                 <div className="file-upload field-border-color rounded-lg h-10 border-neutral-200 border-2 sm: w-11/12 md:w-3/5 ">
 
                                     <input
-
+                                        required
                                         type="file"
                                         accept=".pdf"
                                         onChange={handleFileChange}
@@ -221,9 +303,8 @@ export default function CompanyDetails() {
 
                             <div>
                                 <h3 className="  text-blue-900 text-lg">
-                                    Date of incorporated
+                                    Date of Incorporation
                                 </h3>
-
                                 <DatePicker
                                     onChange={(e: any) => {
                                         setDetails(prevState => ({
@@ -275,7 +356,7 @@ export default function CompanyDetails() {
                             <div className="bg-white">
                                 <div className="flex w-full bg-white">
                                     <input
-
+                                        required
                                         type="checkbox" id="horns" name="horns" />
                                     <p className="  text-sm text-blue-950 px-4">
                                         I give my consent to Aura Networks FZ to pull my credit report from Al Etihad Credit Bureau
@@ -292,20 +373,21 @@ export default function CompanyDetails() {
                                     className=' justify-self-end w-40 items-center h-10  bg-slate-400  rounded-lg'
                                     onClick={() => {
                                         localStorage.setItem('companyDetails', JSON.stringify({
-                                           details,
-                                          
+                                            details,
+
                                         }));
-                                        if(statementCheck){
+                                        if (statementCheck) {
                                             navigate('/company-bank-details')
-                                        }  else{
+                                        } else {
                                             toast({
                                                 variant: 'default',
                                                 title: "Please submit the pdf first.",
-                                              })
+                                            })
                                         }
                                     }}
-                                >COUNTINUE</button>
+                                >CONTINUE</button>
                             </div>
+                        </form>
 
                         {/* </form> */}
                     </div>

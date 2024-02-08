@@ -234,3 +234,16 @@ body {
 .custom-scrollbar::-webkit-scrollbar-track {
   background-color: #f0f0f0; /* Change this to your desired scrollbar track color */
 }
+.hover-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 100;
+}
+
+.file-upload-wrapper:hover .hover-content {
+  display: block;
+}

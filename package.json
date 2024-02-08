@@ -40,6 +40,7 @@
     "dayjs": "^1.11.10",
     "filepond": "^4.30.6",
     "filepond-plugin-pdf-preview": "^1.0.4",
+    "google-libphonenumber": "^3.2.34",
     "i": "^0.3.7",
     "lucide-react": "^0.244.0",
     "moment": "^2.29.4",

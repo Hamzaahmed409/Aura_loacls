@@ -7,14 +7,13 @@ import { useEffect, useState } from 'react';
 export default function CompanyDetails() {
     const navigate = useNavigate();
     const [statementCheck, setStatementCheck] = useState(false);
-    const [selectedFile, setSelectedFile] = useState([]);
+    const [selectedFile, setSelectedFile] = useState<File[]>([]);;
     const [bankDetails, setBankDetails] = useState({
         bankName: '',
-        iban: '',
+        iban: '12',
         accountNumber: '',
     });
-    console.log(selectedFile);
-    const handleFileChange = (e) => {
+    const handleFileChange = (e: any) => {
         const file = e.target.files[0];
         if (file && file.type === 'application/pdf') {
             setSelectedFile([...selectedFile, file]);
@@ -26,30 +25,34 @@ export default function CompanyDetails() {
         }
         // if (file && file.type === 'application/pdf') {
         //     setSelectedFile(file);
-            // localStorage.setItem('selectedFile', JSON.stringify({
-            //     file
-            //  }));
+        // localStorage.setItem('selectedFile', JSON.stringify({
+        //     file
+        //  }));
         // } else {
         //     alert('Please select a valid PDF file.');
         // }
     };
 
-    useEffect(() => {
-        if (selectedFile.length == 6) {
-            pdfUpload()
-        }
-    }, [selectedFile])
+    // useEffect(() => {
+    //     if (selectedFile.length == 6) {
+    //         pdfUpload()
+    //     }
+    // }, [selectedFile])
 
     const pdfUpload = () => {
         var formdata = new FormData();
-        formdata.append("files", selectedFile[0], selectedFile[0]?.name);
-        formdata.append("files", selectedFile[1], selectedFile[1]?.name);
-        formdata.append("files", selectedFile[2], selectedFile[2]?.name);
-        formdata.append("files", selectedFile[3], selectedFile[3]?.name);
-        formdata.append("files", selectedFile[4], selectedFile[4]?.name);
-        formdata.append("files", selectedFile[5], selectedFile[5]?.name);
+        selectedFile.forEach((file: any, index: number) => {
+            formdata.append(`files[${index}]`, file);
+        });
+        // var formdata = new FormData();
+        // formdata.append("files", selectedFile[0], selectedFile[0]?.name);
+        // formdata.append("files", selectedFile[1], selectedFile[1]?.name);
+        // formdata.append("files", selectedFile[2], selectedFile[2]?.name);
+        // formdata.append("files", selectedFile[3], selectedFile[3]?.name);
+        // formdata.append("files", selectedFile[4], selectedFile[4]?.name);
+        // formdata.append("files", selectedFile[5], selectedFile[5]?.name);
 
-        var requestOptions = {
+        var requestOptions: any = {
             method: 'POST',
             body: formdata,
             redirect: 'follow'
@@ -58,18 +61,26 @@ export default function CompanyDetails() {
         fetch("http://ec2-54-165-34-171.compute-1.amazonaws.com:3000/api/auth/upload", requestOptions)
             .then(response => response.json())
             .then(result => {
-                const concatenatedUrls = result?.successfulUploads?.reduce((acc, item) => {
+                const concatenatedUrls = result?.successfulUploads?.reduce((acc: any, item: any) => {
                     return acc + item.url + '\n'; // '\n' for a line break between each URL
                 }, '');
 
                 localStorage.setItem('bankStatmentPdf', JSON.stringify({
                     concatenatedUrls
-                 }));
-                 setStatementCheck(true)
-                console.log(concatenatedUrls);
+                }));
+                localStorage.setItem('bankDetails', JSON.stringify({
+                    bankDetails,
+                }));
+                navigate('/company-details')
             })
             .catch(error => console.log('error', error));
     }
+
+    const removePdf = (indexToRemove: any) => {
+        const updatedArray = [...selectedFile];
+        updatedArray.splice(indexToRemove, 1);
+        setSelectedFile(updatedArray);
+    };
     return (
         <>
             <div className="container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-3 lg:px-0 h-screen max-md:flex bg-slate-50">
@@ -85,11 +96,10 @@ export default function CompanyDetails() {
                     </div>
                     <div className="block z-0 my-20">
                         <div className="flex my-2 ">
-                            <div className="flex items-center justify-center rounded-full    w-6 px-3 mx-6">
+                            <div className="flex items-center justify-center rounded-full w-6 px-3 mx-6">
                                 <FontAwesomeIcon className='text-green-500 ' size='2x' icon={faCircleCheck} />
-
                             </div>
-                            <h1 className="text-muted-foreground font-semibold">COMPANY DETAILS</h1>
+                            <h1 className="text-muted-foreground font-semibold">REPRESENTATIVE DETAILS </h1>
                         </div>
                         <div className="border-l border-green-500  h-8 mx-9"></div>
 
@@ -106,7 +116,7 @@ export default function CompanyDetails() {
                                 <h1 className="text-muted-foreground">3</h1>
                             </div>
                             {/* Vertical Line */}
-                            <h1 className="color-secondary font-semibold">REPRESENTATIVE DETAILS </h1>
+                            <h1 className="color-secondary font-semibold">COMPANY DETAILS</h1>
                         </div>
                         <div className="border-l border-gray-300 h-8  mx-9"></div>
 
@@ -127,6 +137,8 @@ export default function CompanyDetails() {
                         />
                     </div>
                 </div>
+
+                
                 <div className="lg:col-span-2 w-full items-center justify-center background-color h-full">
                     <div className="flex w-full flex-col py-6 md:py-16 px-4 md:px-10 lg:px-20 justify-center space-y-6">
                         <div>
@@ -137,6 +149,20 @@ export default function CompanyDetails() {
                                 You will recive payment in bank account
                             </p>
                         </div>
+                        <form onSubmit={(e) => {
+                            e.preventDefault()
+                            if (selectedFile.length < 1) {
+                                toast({
+                                    variant: "destructive",
+                                    title: "Please upload the pdf!",
+                                })
+                            }
+                            else {
+                                pdfUpload()
+                              
+                            }
+                        }}>
+
                         <div>
                             <h3 className="  text-blue-900 text-lg">
                                 Bank name
@@ -153,55 +179,36 @@ export default function CompanyDetails() {
                                 className=" bg-white mt-2  text-slate-800 px-2  field-border-color rounded-lg h-10 border-2 sm: w-11/12 md:w-3/5" type="text" />
 
                         </div>
-                        <div>
-                            <h3 className="  text-blue-900 text-lg">
-                                IBAN
-                            </h3>
-                            <input
-                                onChange={(e) => {
-                                    setBankDetails(prevState => ({
-                                        ...prevState,
-                                        iban: e.target.value,
-                                    }));
-                                }}
-                                placeholder=" Input bank IBAN"
-                                required
-                                className=" bg-white mt-2  text-slate-800 px-2 border-neutral-200 rounded-lg h-10 border-2  sm: w-11/12  md:w-3/5 " type="text" />
-                        </div>
-
-                        {/* <div>
-                            <h3 className="  text-blue-900 text-lg">
-                                Account number
-                            </h3>
-                            <input
-                                onChange={(e) => {
-                                    setBankDetails(prevState => ({
-                                        ...prevState,
-                                        accountNumber: e.target.value,
-                                    }));
-                                }}
-                                placeholder=" Input your company account number"
-                                required
-                                className=" bg-white mt-2  text-slate-800 px-2 border-neutral-200 rounded-lg h-10 border-2  sm: w-11/12  md:w-3/5 " type="text" />
-                        </div> */}
 
                         <div>
                             <h3 className="  text-blue-900 text-lg">
-                                Bank statment
+                                Upload 6 months bank statement (.pdf only)
                             </h3>
 
                             <div className='flex-wrap flex  '>
                                 <div className=' flex-wrap flex' >
                                     {
-                                        selectedFile.map((e) => {
+                                        selectedFile.map((e, index) => {
+                                            
                                             return (
-                                                <div className="file-upload field-border-color rounded-lg h-32 border-neutral-200 border-2 w-36 p-2 flex  items-center justify-center m-2">
-                                                    <FontAwesomeIcon className="mr-2 h-8 color-primary" icon={faFile} />
-                                                    <h3 className="color-primary">
-                                                        {e.name.length > 10 ? e.name.substring(0, 15) + '...' : e.name}
-                                                    </h3>
+                                                <div className=' flex' >
+                                                    <div className="file-upload field-border-color rounded-lg h-32 border-neutral-200 border-2 w-36 p-2 flex  items-center justify-center m-2">
+                                                        <FontAwesomeIcon className="mr-2 h-8 color-primary" icon={faFile} />
+                                                        <h3 className="color-primary">
+                                                            {e.name.length > 10 ? e.name.substring(0, 15) + '...' : e.name}
+                                                        </h3>
+                                                    </div>
+                                                    <button 
+                                                    className=' text-black'
+                                                    style={{
+                                                        position:'relative',
+                                                        right:10,
+                                                        top:-60
+                                                    }}
+                                                    onClick={() => {
+                                                        removePdf(index)
+                                                    }}>X</button>
                                                 </div>
-
 
                                             )
                                         })
@@ -231,23 +238,11 @@ export default function CompanyDetails() {
                             <button onClick={() => navigate(-1)} className=" mx-8  self-center color-primary   ">
                                 BACK
                             </button>
-                            <button onClick={() => {
-                                localStorage.setItem('bankDetails', JSON.stringify({
-                                    bankDetails,
-                                }));
-                                navigate('/representative-details')
-
-                                // if(statementCheck){
-                                //     navigate('/representative-details')
-                                // }
-                                // else{
-                                //     toast({
-                                //         variant: 'default',
-                                //         title: "Please submit the pdfs first.",
-                                //       })
-                                // }
-                            }} className='justify-self-end  w-40 items-center h-10  bg-slate-400  rounded-lg' >COUNTINUE</button>
+                            <button  className='justify-self-end  w-40 items-center h-10  bg-slate-400  rounded-lg' >CONTINUE</button>
                         </div>
+
+                        </form>
+
                     </div>
 
                 </div>

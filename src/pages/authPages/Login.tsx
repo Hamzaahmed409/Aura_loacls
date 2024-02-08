@@ -41,10 +41,10 @@ export default function Login() {
             Don't have an account
               < button
               onClick={()=>{
-                navigate('/company-details')
+                navigate('/representative-details')
               } }
                 className="text-blue-900"
-                // className="underline underline-offset-4 hover:text-primary"
+                
               >
                ? Register now
               </button>

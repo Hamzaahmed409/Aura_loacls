@@ -1,7 +1,9 @@
 // @ts-nocheck 
 
-export default function Success() {
+import { useNavigate } from "react-router-dom";
 
+export default function Success() {
+  const navigate = useNavigate();
     return (
         <>
         <div className="container relative items-center md:grid lg:max-w-none w-full lg:px-0 h-screen max-md:flex bg-slate-50">
@@ -29,7 +31,7 @@ export default function Success() {
                   Your account is set up!
                 </h1>
                 <p className="text-base text-slate-500 font-medium mt-2 md:mt-6">You can now use Aura to get paid, hassle-free</p>
-                <button className='bg-slate-400  md:w-2/4 sm: w-60 h-14 rounded button mt-4 md:mt-6'>LOG ME IN</button>
+                <button className='bg-slate-400  md:w-2/4 sm: w-60 h-14 rounded button mt-4 md:mt-6' onClick={()=>{navigate('/login')}}>LOG ME IN</button>
               </div>
             </div>
           </div>

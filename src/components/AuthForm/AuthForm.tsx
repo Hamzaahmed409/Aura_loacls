@@ -13,6 +13,8 @@ import 'react-phone-input-2/lib/style.css'
 import { login as loginApi, verify } from '@/services/api'
 import OTPInput from "otp-input-react";
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
 function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; isDashboard: boolean; }) => void; }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -49,19 +51,20 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
 
   async function onSubmit() {
     setIsLoading(true)
+    const mobileNumberWithoutCountryCode = phoneNumber.slice(countryCode.length); 
     if (phoneNumber && countryCode) {
       const body = {
-        countryCode: countryCode,
-        mobileNumber: phoneNumber
+        countryCode: '+'+countryCode,
+        mobileNumber: mobileNumberWithoutCountryCode
       }
       loginApi(body).then((response: any) => {
-        if (response.success) {
+        if (response.message === 'otp sent successfully') {
           setUserDetails(response.data)
           setModalIsOpen(true)
           toast({
             variant: 'default',
             title: "Logged in successfully",
-            description: "Welcome to monstro!",
+            description: "Welcome to AURA!",
           })
         } else {
           toast({
@@ -94,21 +97,25 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
 
   async function verifyOtp() { 
     if (phoneNumber && countryCode) {
+      //consle.log('+',countryCode)
+      const mobileNumberWithoutCountryCode = phoneNumber.slice(countryCode.length); 
       const body = {
-        countryCode: countryCode,
-        mobileNumber: phoneNumber,
+        countryCode: '+'+countryCode,
+        mobileNumber: mobileNumberWithoutCountryCode,
         otp :  OTP
       }
       console.log(body);
       
       verify(body).then((response: any) => {
-        if (response.success) {
+        console.log('respone : ',response);
+        if (response === 'otp verified successfully!') {
+          console.log("");
           setUserDetails(response.data)
           setModalIsOpen(false)
           toast({
             variant: 'default',
             title: "Logged in successfully",
-            description: "Welcome to monstro!",
+            description: "Welcome to AURA!",
           })
           navigate('/dashBoard')
 

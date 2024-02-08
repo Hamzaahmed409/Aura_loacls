@@ -66,19 +66,21 @@ export default function CompanyDetails() {
                 "bank_account_number": '123123123',
                 "user_name": representativeDetails.fullName,
                 "user_email": representativeDetails.email,
-                "user_country_code": representativeDetails.phone,
-                "user_mobile_no": representativeDetails.phone,
-                "bank_statement":bankStatmentPdf.concatenatedUrls,
+                "user_country_code": representativeDetails.phone.slice(0, 4),
+                "user_mobile_no": representativeDetails.phone.slice(4),
+                "bank_statement": bankStatmentPdf.concatenatedUrls,
                 "terms_and_cond_agreed": true
             }
             signup(body).then((response: any) => {
-                if (response.success) {
+                console.log(response.user_id)
+                if (response.user_id) {
                     setModalIsOpen(true)
                     toast({
                         variant: 'default',
                         title: "SignUp successfully",
-                        description: "Welcome to monstro!",
+                        description: "Welcome to AURA!",
                     })
+                    navigate('/terms-&-conditions');
                 } else {
                     toast({
                         variant: "destructive",
@@ -107,27 +109,41 @@ export default function CompanyDetails() {
             })
         }
     }
-
-
-
     async function verifyOtp() {
+        // let representativeDetails = JSON.stringify({
+        //     phone: representativeDetails.phone,
+        //     countryCode: countryCode,
+        //     email: representativeDetails.email,
+        //     fullName: representativeDetails.fullName
+        // })
+        // localStorage.setItem('representativeDetails', representativeDetails);
+        // navigate('/company-bank-details')
+
         if (true) {
             const body = {
                 countryCode: 23,
                 mobileNumber: 123123123,
                 otp: 123
             }
-            console.log(body);
-
             verify(body).then((response: any) => {
                 if (response.success) {
                     onSubmit()
                     setModalIsOpen(false)
                     toast({
                         variant: 'default',
-                        title: "Logged in successfully",
-                        description: "Welcome to monstro!",
+                        title: "Otp Verified",
                     })
+                    navigate('/company-bank-details')
+                    let representativeDetails = JSON.stringify({
+                        phone: representativeDetails.phone,
+                        countryCode: countryCode,
+                        email: representativeDetails.email,
+                        fullName: representativeDetails.fullName
+                    })
+                    localStorage.setItem('representativeDetails', representativeDetails);
+                    navigate('/company-bank-details')
+            
+
                 } else {
                     toast({
                         variant: "destructive",
@@ -172,33 +188,33 @@ export default function CompanyDetails() {
                     </div>
                     <div className="block z-0 my-20">
                         <div className="flex my-2 ">
-                            <div className="flex items-center justify-center rounded-full    w-6 px-3 mx-6">
-                                <FontAwesomeIcon className='text-green-500 ' size='2x' icon={faCircleCheck} />
+                            <div className="flex items-center justify-center rounded-full border-color color-primary border-2 w-6 px-3 mx-6">
+                                <h1 className="color-primary">1</h1>
                             </div>
-                            <h1 className="text-muted-foreground font-semibold">COMPANY DETAILS</h1>
+
+                            <h1 className="color-primary font-semibold">REPRESENTATIVE DETAILS</h1>
                         </div>
-                        <div className="border-l border-green-500  h-8 mx-9"></div>
+                        <div className="border-l border-gray-300 h-8 mx-9"></div>
 
                         <div className="flex my-2 ">
-                            <div className="flex items-center justify-center rounded-full   w-6 px-3 mx-6">
-                                <FontAwesomeIcon className='text-green-500 ' size='2x' icon={faCircleCheck} />
-
+                            <div className="flex items-center justify-center rounded-full border-gray-300 text-blue-900 border-2 w-6 px-3 mx-6">
+                                <h1 className="text-muted-foreground">2</h1>
                             </div>
                             {/* Vertical Line */}
-                            <h1 className="text-muted-foreground font-semibold">COMPANY BANK DETAILS</h1>
+                            <h1 className="color-secondary font-semibold">COMPANY BANK DETAILS</h1>
                         </div>
-                        <div className="border-l border-green-500 h-8 mx-9"></div>
+                        <div className="border-l border-gray-300 h-8 mx-9"></div>
                         <div className="flex my-2">
-                            <div className="flex items-center justify-center rounded-full border-color border-2 w-8 h-8 px-3 mx-5">
-                                <h1 className="color-primary">3</h1>
+                            <div className="flex items-center justify-center rounded-full border-gray-300 text-blue-900 border-2 w-6 px-3 mx-6">
+                                <h1 className="text-muted-foreground">3</h1>
                             </div>
                             {/* Vertical Line */}
-                            <h1 className="color-primary font-semibold">REPRESENTATIVE DETAILS </h1>
+                            <h1 className="color-secondary font-semibold">COMPANY DETAILS</h1>
                         </div>
                         <div className="border-l border-gray-300 h-8  mx-9"></div>
 
                         <div className="flex my-2">
-                            <div className="flex items-center justify-center rounded-full border-gray-300 text-blue-900 border-2 w-8 h-8 px-3 mx-5">
+                            <div className="flex items-center justify-center rounded-full border-gray-300 text-blue-900 border-2 w-6 px-3 mx-6">
                                 <h1 className="text-muted-foreground">4</h1>
                             </div>  {/* Vertical Line */}
                             <h1 className="color-secondary font-semibold">TERMS & CONDITIONS</h1>
@@ -214,84 +230,88 @@ export default function CompanyDetails() {
                         />
                     </div>
                 </div>
-
-
                 <div className="lg:col-span-2 w-full items-center justify-center background-color h-full pt-32">
                     <div className="flex w-full flex-col py-6 md:py-16 px-4 md:px-10 lg:px-20 justify-center space-y-6">
-                        <div>
-                            <h1 className="block z-0  text-blue-900 text-2xl font-semibold">
-                                Representative Details
-                            </h1>
-                            <p className=" mt-2 text-blue-900 text-sm" >
-                                This person wil be our point o contact at ecoscope innovations in case we need to get in touch.
-                            </p>
-                        </div>
-                        <div>
-                            <h3 className="  text-blue-900 text-lg">
-                                Full name
-                            </h3>
-                            <input
-                                onChange={(e) => {
-                                    setRepresentativeBankDetails(prevState => ({
-                                        ...prevState,
-                                        fullName: e.target.value,
-                                    }));
-                                }}
-                                required
-                                placeholder=" Input representative full name"
-                                className=" bg-white mt-2  text-slate-800 px-2 field-border-color rounded-lg h-10 border-2  sm: w-11/12 md:w-3/5" type="text" />
-                        </div>
-
-                        <div>
-                            <h3 className="  text-blue-900 text-lg">
-                                Email
-                            </h3>
-                            <input
-                                onChange={(e) => {
-                                    setRepresentativeBankDetails(prevState => ({
-                                        ...prevState,
-                                        email: e.target.value,
-                                    }));
-                                }}
-                                placeholder=" Input representative email"
-                                required
-                                className=" bg-white mt-2  text-slate-800 px-2 field-border-color rounded-lg h-10 border-2  sm: w-11/12 md:w-3/5" type="text" />
-                        </div>
-                        <div>
-                            <h3 className="  text-blue-900 text-lg flex">
-                                Phone  <p className=' text-slate-500 text-sm mt-1 font-normal ml-2 '>(Use for Login)</p>
-                            </h3>
-                            <PhoneInput
-                                defaultCountry="ae"
-                                value={phone}
-                                onChange={(phone, country) => {
-                                    setCountryCode(country?.dialCode)
-                                    setRepresentativeBankDetails(prevState => ({
-                                        ...prevState,
-                                        phone: phone,
-                                    }))
-                                }
-                                }
-
-
-                                className="border-neutral-200  sm: w-11/12 md:w-3/5 "
-                            />
-
-                            {/* <input
-                                placeholder=" Input your company account number"
-                                className=" bg-white mt-2  border-neutral-200 rounded-lg h-9 border-2  sm:w-3/6  w-3/5" type="text" /> */}
-                        </div>
-
-
-                        <div className="flex sm:w-3/6  md:w-3/5 items-center  justify-end">
-                            <button onClick={() => navigate(-1)} className="mx-8 self-center color-primary ">
-                                BACK
-                            </button>
-                            <button onClick={() => {
-                                // navigate('/terms-&-conditions')
+                        <form onSubmit={(e) => {
+                            e.preventDefault()
+                            if (representativeDetails.phone.length < 9) {
+                                toast({
+                                    variant: "destructive",
+                                    title: "Invalid phone number!",
+                                })
+                            }
+                            else {
                                 setModalIsOpen(true)
-                            }} className=' justify-self-end bg-slate-400  w-40 items-center h-10 rounded-lg'>COUNTINUE</button>
-                        </div>
+                            }
+                        }}>
+                            <div>
+                                <h1 className="block z-0  text-blue-900 text-2xl font-semibold">
+                                    Representative Details
+                                </h1>
+                                <p className=" mt-2 text-blue-900 text-sm" >
+                                    This person wil be our point o contact at ecoscope innovations in case we need to get in touch.
+                                </p>
+                            </div>
+                            <div>
+                                <h3 className="  text-blue-900 text-lg">
+                                    Full name
+                                </h3>
+                                <input
+                                    onChange={(e) => {
+                                        setRepresentativeBankDetails(prevState => ({
+                                            ...prevState,
+                                            fullName: e.target.value,
+                                        }));
+                                    }}
+                                    required
+                                    placeholder=" Input representative full name"
+                                    className=" bg-white mt-2  text-slate-800 px-2 field-border-color rounded-lg h-10 border-2  sm: w-11/12 md:w-3/5" type="text" />
+                            </div>
+
+                            <div>
+                                <h3 className="  text-blue-900 text-lg">
+                                    Email
+                                </h3>
+                                <input
+                                    onChange={(e) => {
+                                        setRepresentativeBankDetails(prevState => ({
+                                            ...prevState,
+                                            email: e.target.value,
+                                        }));
+                                    }}
+                                    placeholder=" Input representative email"
+                                    required
+                                    className=" bg-white mt-2  text-slate-800 px-2 field-border-color rounded-lg h-10 border-2  sm: w-11/12 md:w-3/5" type="text" />
+                            </div>
+                            <div>
+                                <h3 className="  text-blue-900 text-lg flex">
+                                    Phone  <p className=' text-slate-500 text-sm mt-1 font-normal ml-2 '>(This number will be OTP verified and used for account log in)</p>
+                                </h3>
+                                <PhoneInput
+                                    defaultCountry="ae"
+                                    value={phone}
+                                    onChange={(phone, country) => {
+                                        setCountryCode(country?.dialCode)
+                                        setRepresentativeBankDetails(prevState => ({
+                                            ...prevState,
+                                            phone: phone,
+                                        }))
+                                    }
+                                    }
+                                    required
+                                    className="border-neutral-200  sm: w-11/12 md:w-3/5 "
+                                />
+
+                            </div>
+
+                            <div className="flex sm:w-3/6  md:w-3/5 items-center mt-4 justify-end">
+                                <button onClick={() => navigate(-1)} className="mx-8 self-center color-primary ">
+                                    BACK
+                                </button>
+                                <button className=' justify-self-end bg-slate-400  w-40 items-center h-10 rounded-lg'>CONTINUE</button>
+                            </div>
+
+                        </form>
                     </div>
                 </div>
             </div>
@@ -299,8 +319,6 @@ export default function CompanyDetails() {
 
             <Modal
                 isOpen={modalIsOpen}
-                // onAfterOpen={afterOpenModal}
-                // onRequestClose={setIsOpen}
                 style={customStyles}
                 contentLabel="Example Modal"
             >
@@ -332,8 +350,8 @@ export default function CompanyDetails() {
 
                         <button onClick={() => {
                             setModalIsOpen(false)
-                            // verifyOtp()
-                            onSubmit()
+                            verifyOtp()
+                            // onSubmit()
 
                         }} className='self-center w-10/12 items-center h-10 button rounded-lg mt-8'>VERIFY</button>
                     </div>
