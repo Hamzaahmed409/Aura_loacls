@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'; 
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import 'react-international-phone/style.css';
 import { useState } from "react";
 import 'react-dropdown/style.css';
@@ -71,13 +71,13 @@ export default function TermsAndConditions() {
                 <div className="lg:col-span-2 w-full items-center justify-center background-color h-full sm:px-1">
                     <div className="flex flex-col py-6 md:py-16 sm:px-4 md:px-10 lg:px-20 justify-center space-y-6 bg-white  h-5/6">
                         {/* <div> */}
-                            <h1 className="text-2xl color-primary font-semibold">
-                                Terms and Conditions
-                            </h1>
-                            <h1 className="text-lg text-black font-semibold">
-                                Your Agreement
-                            </h1>
-                            <p className='text-base color-secondary '>Last Revised: December 16, 2013</p>
+                        <h1 className="text-2xl color-primary font-semibold">
+                            Terms and Conditions
+                        </h1>
+                        <h1 className="text-lg text-black font-semibold">
+                            Your Agreement
+                        </h1>
+                        <p className='text-base color-secondary '>Last Revised: December 16, 2013</p>
                         {/* </div> */}
                         <div className="custom-scrollbar terms-container max-h-80 overflow-y-auto p-4 background-color   rounded-md    h-3/4">
                             <p className='text-base color-secondary '>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
@@ -97,6 +97,7 @@ export default function TermsAndConditions() {
 
                         <p className="text-black text-sm mt-4">
                             <input
+                                required
                                 type="checkbox"
                                 checked={isChecked}
                                 onChange={handleCheckboxChange}

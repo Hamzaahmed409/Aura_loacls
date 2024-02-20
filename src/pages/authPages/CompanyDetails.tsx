@@ -8,28 +8,29 @@ import 'react-dropdown/style.css';
 import { toast } from "@/components/ui/use-toast"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faFile } from '@fortawesome/free-solid-svg-icons';
+import { IP } from "@/services/endPoints";
+import { DocumentService, SignupDto, UserService } from "@/services/api/index";
+import { DOCUMENTTYPE } from "@/services/api/enums/constants";
 
 export default function CompanyDetails() {
+    const { documentControllerUploadFiles } = DocumentService;
     const navigate = useNavigate();
-    const [statementCheck, setStatementCheck] = useState(false);
-    const [concatenatedUrls, serConcatenatedUrls] = useState('');
-    const [selectedFile, setSelectedFile] = useState(null);
+    const[uploadStatus,setUploadStatus] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<File[]>([]);
     const [details, setDetails] = useState({
         companyName: '',
         dateOfIncorporated: '',
         turnover: '',
         currency: '',
-        Category: ''
+        Category: '',
+        avgInvioces: '',
     });
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file && file.type === 'application/pdf') {
             setSelectedFile(file);
-            pdfUpload(file)
-            // localStorage.setItem('selectedFile', JSON.stringify({
-            //     file
-            //  }));
+            pdfUpload();
         } else {
             alert('Please select a valid PDF file.');
         }
@@ -43,6 +44,12 @@ export default function CompanyDetails() {
         '250,000-500,000',
         '500,000-1,000,000',
         '>1,000,000'
+    ]
+    const avgInvioces = [
+        '<5',
+        'Between 5 and 10',
+        'Between 11 and 20',
+        '>20'
     ]
     const categoryOption = [
         ' Services - Consulting',
@@ -89,26 +96,32 @@ export default function CompanyDetails() {
     ]
     const defaultOption = options[0];
 
-    const pdfUpload = (file) => {
-        var formdata = new FormData();
-        formdata.append("files", file, file?.name);
+    const pdfUpload = async () => {
 
-        var requestOptions = {
-            method: 'POST',
-            body: formdata,
-            redirect: 'follow'
+        let representativeDetails = JSON.parse(localStorage.getItem('representativeDetails') || '{}');
+        const uploadData = {
+            files: selectedFile,
+            folder_name: 'noman',
+            seller_id: representativeDetails.seller_id,
+            is_perfios: true,
+            document_type: DOCUMENTTYPE.TRADELICENSE
         };
-
-        fetch("http://ec2-54-165-34-171.compute-1.amazonaws.com:3000/api/auth/upload", requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                const concatenatedUrls = result?.successfulUploads?.reduce((acc, item) => {
-                    return acc + item.url + '\n'; // '\n' for a line break between each URL
-                }, '');
-                serConcatenatedUrls(concatenatedUrls)
-                setStatementCheck(true)
-            })
-            .catch(error => console.log('error', error));
+        try {
+            const response = await documentControllerUploadFiles(uploadData);
+            if (response.successfulUploads[0].url) {
+                setUploadStatus(true);
+                toast({
+                    variant: 'default',
+                    title: "Trade license uploaded sucessfully",
+                    description: "Upload",
+                })
+            } else {
+                throw new Error('failed to upload');
+            }
+        }
+        catch (error) {
+            console.log(error)
+        }
     }
 
     let bankDetails = localStorage.getItem('bankDetails');
@@ -119,31 +132,33 @@ export default function CompanyDetails() {
     bankStatmentPdf = JSON.parse(bankStatmentPdf)
     let tradeLicense = localStorage.getItem('tradeLicense');
     tradeLicense = JSON.parse(tradeLicense)
-    
-    async function onSubmit() {
-        setIsLoading(true)
-        if (true) {
-            const body = {
+    const { userControllerSignup } = UserService;
+        async function onSubmit() {
+            //setIsLoading(true);
+            const signUp: SignupDto = {
+                user_id: representativeDetails.user_id,
+                seller_id: representativeDetails.seller_id,
                 company_name: details.companyName,
-                trade_license_no: concatenatedUrls.concatenatedUrls,
-                "date_of_incorporation": details.dateOfIncorporated,
-                "annual_turnover": details.turnover,
-                "business_category": details.Category,
-                "credit_consent": true,
-                "bank_name": bankDetails.bankDetails.bankName,
-                "bank_iban": bankDetails.bankDetails.iban,
-                "bank_account_number": '123123123',
-                "user_name": representativeDetails.fullName,
-                "user_email": representativeDetails.email,
-                "user_country_code": representativeDetails.phone.slice(0, 4),
-                "user_mobile_no": representativeDetails.phone.slice(4),
-                "bank_statement": bankStatmentPdf.concatenatedUrls,
-                "terms_and_cond_agreed": true
+                company_registered_name: details.companyName,
+                avg_num_invoices: details.avgInvioces,
+                date_of_incorporation: details.dateOfIncorporated,
+                annual_turnover: details.turnover,
+                business_category: details.Category
             }
-            signup(body).then((response: any) => {
-                console.log(response.user_id)
-                if (response.user_id) {
-                    setModalIsOpen(true)
+            try {
+                if(uploadStatus == false){
+                    toast({
+                        variant: "destructive",
+                        title: "Please upload trade license again",
+                        description: "Upload",
+                    })
+                    return
+                }
+                const response = await userControllerSignup(signUp);
+                console.log(response)
+                if (response.id) {
+                    //setModalIsOpen(true)
+                    console.log("idd", response.id)
                     toast({
                         variant: 'default',
                         title: "SignUp successfully",
@@ -157,26 +172,65 @@ export default function CompanyDetails() {
                         description: "Please, Contact support.",
                     })
                 }
-            }).catch((error: { response: { data: { message: any; }; }; }) => {
-                setModalIsOpen(true)
+            } catch (error) {
+                throw new Error("couldnt sign-up contact Administration");
+            }
+        // if (true) {
+        //     const body = {
+        //         company_name: details.companyName,
+        //         trade_license_no: concatenatedUrls.concatenatedUrls,
+        //         "date_of_incorporation": details.dateOfIncorporated,
+        //         "annual_turnover": details.turnover,
+        //         "business_category": details.Category,
+        //         "credit_consent": true,
+        //         "bank_name": bankDetails.bankDetails.bankName,
+        //         "bank_iban": bankDetails.bankDetails.iban,
+        //         "bank_account_number": '123123123',
+        //         "user_name": representativeDetails.fullName,
+        //         "user_email": representativeDetails.email,
+        //         "user_country_code": representativeDetails.phone.slice(0, 4),
+        //         "user_mobile_no": representativeDetails.phone.slice(4),
+        //         "bank_statement": bankStatmentPdf.concatenatedUrls,
+        //         "terms_and_cond_agreed": true
+        //     }
+        //     signup(body).then((response: any) => {
+        //         console.log(response.user_id)
+        //         if (response.user_id) {
+        //             setModalIsOpen(true)
+        //             toast({
+        //                 variant: 'default',
+        //                 title: "SignUp successfully",
+        //                 description: "Welcome to AURA!",
+        //             })
+        //             navigate('/terms-&-conditions');
+        //         } else {
+        //             toast({
+        //                 variant: "destructive",
+        //                 title: "Something went wrong!",
+        //                 description: "Please, Contact support.",
+        //             })
+        //         }
+        //     }).catch((error: { response: { data: { message: any; }; }; }) => {
+        //         setModalIsOpen(true)
 
-                toast({
-                    variant: "destructive",
-                    title: "Error!",
-                    description: error.response.data.message,
+        //         toast({
+        //             variant: "destructive",
+        //             title: "Error!",
+        //             description: error.response.data.message,
 
-                })
-            }).finally(() => {
-                setIsLoading(false)
-            });
-        } else {
-            setIsLoading(false)
-            toast({
-                variant: "destructive",
-                title: "Something is missing!",
-                description: "Email, Password are required to login",
-            })
-        }
+        //         })
+        //     }).finally(() => {
+        //         setIsLoading(false)
+        //     });
+        // } else {
+        //     setIsLoading(false)
+        //     toast({
+        //         variant: "destructive",
+        //         title: "Something is missing!",
+        //         description: "Email, Password are required to login",
+        //     })
+        // }
+       // navigate('/terms-&-conditions');
     }
     return (
         <>
@@ -316,7 +370,7 @@ export default function CompanyDetails() {
                             </div>
 
                             <div>
-                                <h3 className="  text-blue-900 text-lg">
+                                <h3 className="text-blue-900 text-lg">
                                     Annual turnover
                                 </h3>
                                 <div className=" sm: w-11/12  md:w-3/5 flex">
@@ -337,7 +391,22 @@ export default function CompanyDetails() {
                                         placeholder="Select an option" />;
                                 </div>
                             </div>
-
+                            <div className="mb-3">
+                                <h3 className="  text-blue-900 text-lg">
+                                    Average number of sale invoices issued per month
+                                </h3>
+                                <div className=" sm: w-11/12  md:w-3/5 flex">
+                                    <Dropdown options={avgInvioces} className=" h-10  w-full  " menuClassName='Dropdown-menu-view'
+                                        // value={annualTurnOver[0]} 
+                                        onChange={(e) => {
+                                            setDetails(prevState => ({
+                                                ...prevState,
+                                                avgInvioces: e.value,
+                                            }));
+                                        }}
+                                        placeholder="Select an option" />;
+                                </div>
+                            </div>
                             <div>
                                 <h3 className="  text-blue-900 text-lg">
                                     Category of business
@@ -371,20 +440,20 @@ export default function CompanyDetails() {
                                 <button
                                     // type='submit'
                                     className=' justify-self-end w-40 items-center h-10  bg-slate-400  rounded-lg'
-                                    onClick={() => {
-                                        localStorage.setItem('companyDetails', JSON.stringify({
-                                            details,
+                                    // onClick={() => {
+                                    //     localStorage.setItem('companyDetails', JSON.stringify({
+                                    //         details,
 
-                                        }));
-                                        if (statementCheck) {
-                                            navigate('/company-bank-details')
-                                        } else {
-                                            toast({
-                                                variant: 'default',
-                                                title: "Please submit the pdf first.",
-                                            })
-                                        }
-                                    }}
+                                    //     }));
+                                    //     if (statementCheck) {
+                                    //         navigate('/terms-&-conditions');
+                                    //     } else {
+                                    //         toast({
+                                    //             variant: 'default',
+                                    //             title: "Please submit the pdf first.",
+                                    //         })
+                                    //     }
+                                    // }}
                                 >CONTINUE</button>
                             </div>
                         </form>

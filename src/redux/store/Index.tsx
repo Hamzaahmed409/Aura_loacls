@@ -1,6 +1,6 @@
-import {createStore} from 'redux';
 import CombineReducer from '../reducers/CombineReducer';
+import {configureStore} from "@reduxjs/toolkit";
 
-const store = createStore(CombineReducer);
+const store = configureStore({reducer: CombineReducer})
 
 export default store;

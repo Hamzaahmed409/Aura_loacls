@@ -8,12 +8,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { toast } from "@/components/ui/use-toast"
 import { connect, useDispatch } from 'react-redux';
-import PhoneInput from 'react-phone-input-2'
+import { PhoneInput } from 'react-international-phone';
 import 'react-phone-input-2/lib/style.css'
 import { login as loginApi, verify } from '@/services/api'
 import OTPInput from "otp-input-react";
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import { OtpDto } from '@/services/api';
+import { AuthService } from '../../services/api/services/AuthService';
+const { authControllerLogin,authControllerVerify} = AuthService;
 
 function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; isDashboard: boolean; }) => void; }) {
   const dispatch = useDispatch();
@@ -51,65 +54,51 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
 
   async function onSubmit() {
     setIsLoading(true)
-    const mobileNumberWithoutCountryCode = phoneNumber.slice(countryCode.length); 
+    const mobileNumberWithoutCountryCode = phoneNumber.slice(countryCode.length);
     if (phoneNumber && countryCode) {
-      const body = {
-        countryCode: '+'+countryCode,
-        mobileNumber: mobileNumberWithoutCountryCode
+      const body: OtpDto = {
+        country_code: countryCode,
+        mobile_number: mobileNumberWithoutCountryCode
       }
-      loginApi(body).then((response: any) => {
+      try {
+        const response = await authControllerLogin(body);
         if (response.message === 'otp sent successfully') {
           setUserDetails(response.data)
           setModalIsOpen(true)
           toast({
             variant: 'default',
-            title: "Logged in successfully",
+            title: "Otp sent successfully",
             description: "Welcome to AURA!",
           })
         } else {
           toast({
             variant: "destructive",
-            title: "Something went wrong!",
+            title: "User was not found with this number",
             description: "Please, Contact support.",
           })
         }
-      }).catch((error: { response: { data: { message: any; }; }; }) => {
-        setModalIsOpen(true)
+      } catch (error) {
         toast({
           variant: "destructive",
-          title: "Error!",
-          description: error.response.data.message,
-
+          title: "User was not found with this number",
+          description: "Please, Contact support.",
         })
-      }).finally(() => {
-        setIsLoading(false)
-      });
-    } else {
-      setIsLoading(false)
-      toast({
-        variant: "destructive",
-        title: "Something is missing!",
-        description: "PhoneNumber are required to login",
-      })
+      }
     }
   }
 
 
-  async function verifyOtp() { 
+  async function verifyOtp() {
     if (phoneNumber && countryCode) {
-      //consle.log('+',countryCode)
-      const mobileNumberWithoutCountryCode = phoneNumber.slice(countryCode.length); 
-      const body = {
-        countryCode: '+'+countryCode,
+      const mobileNumberWithoutCountryCode = phoneNumber.slice(countryCode.length);
+      const body:VerifyLoginDto = {
+        countryCode: countryCode,
         mobileNumber: mobileNumberWithoutCountryCode,
-        otp :  OTP
+        otp: OTP
       }
-      console.log(body);
-      
-      verify(body).then((response: any) => {
-        console.log('respone : ',response);
-        if (response === 'otp verified successfully!') {
-          console.log("");
+      try{
+        const response = await authControllerVerify(body);
+        if (response.message === 'otp verified successfully') {
           setUserDetails(response.data)
           setModalIsOpen(false)
           toast({
@@ -118,7 +107,6 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
             description: "Welcome to AURA!",
           })
           navigate('/dashBoard')
-
         } else {
           toast({
             variant: "destructive",
@@ -126,27 +114,11 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
             description: "Please, Contact support.",
           })
         }
-      }).catch((error: { response: { data: { message: any; }; }; }) => {
+      }catch(error){
 
-        toast({
-          variant: "destructive",
-          title: "Error!",
-          description: error.response.data.message,
-
-        })
-      }).finally(() => {
-        setIsLoading(false)
-      });
-    } else {
-      setIsLoading(false)
-      toast({
-        variant: "destructive",
-        title: "Something is missing!",
-        description: "Email, Password are required to login",
-      })
-    }
+      }
   }
-
+}
 
   const createUserSession = () => {
     localStorage.setItem('auth', JSON.stringify(userDetails));
@@ -164,16 +136,28 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
           <h2 className=" text-blue-900">
             Phone
           </h2>
-          <PhoneInput
-            country={'us'}
+          {/* <PhoneInput
+            defaultCountry="ae"
             value={phoneNumber}
-            onChange={(phone, country  ) =>{ 
+            onChange={(phone, country) => {
               setCountryCode(country?.dialCode)
-              setPhoneNumber(phone)}
+              setPhoneNumber(phone)
+            }
             }
             placeholder='Enter phone number'
             dropdownStyle={{ color: 'black' }}
             inputStyle={{ color: 'black' }}
+          /> */}
+          <PhoneInput
+            defaultCountry="ae"
+            value={phoneNumber}
+            onChange={(phone, country) => {
+              setCountryCode('+' + country.country.dialCode);
+              setPhoneNumber(phone)
+            }}
+            required
+            placeholder='Enter Phone Number'
+            className="border-neutral-200  sm: w-11/12 md:w-3/5 "
           />
         </div>
 
@@ -201,38 +185,39 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
         contentLabel="Example Modal"
       >
         <div className=' '>
-          <button onClick={()=>{
+          <button onClick={() => {
             setModalIsOpen(false)
 
           }} className='absolute top-6 text-2xl right-8 text-black'>
-     
-      <img
-                src="/public/close.png"
-                width={16}
-                height={18}
-                alt="Authentication"
-                className="hidden dark:block mb-2"
-              />
+
+            <img
+              src="/public/close.png"
+              width={16}
+              height={18}
+              alt="Authentication"
+              className="hidden dark:block mb-2"
+            />
           </button>
           <div className='container relative flex flex-col items-center'>
 
             <h1 className='mb-4 text-2xl font-semibold text-black text-center'>Enter Verification Code</h1>
-            <p className='text-center text-black'>Enter the 5 digit verification code sent to your mobile</p>
+            <p className='text-center text-black'>Enter the 4 digit verification code sent to your mobile</p>
             <p className='text-center text-black'>number ********6152</p>
 
             <div className='flex flex-col items-center mt-8'>
-              
+
               <OTPInput className='text-black ' placeholder="****" value={OTP} onChange={setOTP} autoFocus OTPLength={4} otpType="number" secure />
               <button className='mt-2 color-primary'>Resend Code</button>
             </div>
 
             <p className="text-black text-sm mt-4">
               <input
+                required
                 type="checkbox"
                 checked={isChecked}
                 onChange={handleCheckboxChange}
               />
-             {' '} I agree to Aura’s{' '}
+              {' '} I agree to Aura’s{' '}
               <Link to="/terms" className="color-primary">
                 Terms of Service
               </Link>{' '}
@@ -242,7 +227,7 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
               </Link>
             </p>
 
-            <button onClick={()=>{
+            <button onClick={() => {
               verifyOtp()
             }} className='self-center w-10/12 items-center h-10 button rounded-lg mt-8'>VERIFY</button>
           </div>
