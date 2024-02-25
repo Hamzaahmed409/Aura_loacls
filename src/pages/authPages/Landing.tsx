@@ -1,6 +1,8 @@
 import Header from '@/components/Header/Header'
 import { Button } from '@/components/ui/button'
+import {useNavigate} from "react-router-dom";
 export default function Landing() {
+    const navigate = useNavigate();
     return (
         
         <div className=' bg-white  h-screen block' >
@@ -30,7 +32,7 @@ export default function Landing() {
                     job to get paid on the invoice date.
                 </p>
 
-                <Button className='button rounded-3xl w-32 h-12 text-white mt-8'>
+                <Button onClick={() => { navigate('/login') }}  className='button rounded-3xl w-32 h-12 text-white mt-8'>
                     Get started
                 </Button>
             </div>

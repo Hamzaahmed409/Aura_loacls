@@ -159,7 +159,7 @@ export default function RepresentativeDetails() {
                         e.preventDefault();
                         sendOtp()
                     }}>
-                        <div>
+                        <div style={{marginBottom: "10px"}}>
                             <h1 className="block z-0  text-blue-900 text-2xl font-semibold">
                                 Representative Details
                             </h1>
@@ -167,9 +167,9 @@ export default function RepresentativeDetails() {
                                 This person will be our point of contact for the account
                             </p>
                         </div>
-                        <div>
+                        <div style={{marginTop: "5px", marginBottom: "5px"}}>
                             <h3 className="  text-blue-900 text-lg">
-                                Full name
+                                Full Name
                             </h3>
                             <input
                                 onChange={(e) => {
@@ -182,8 +182,7 @@ export default function RepresentativeDetails() {
                                 className=" bg-white mt-2  text-slate-800 px-2 field-border-color rounded-lg h-10 border-2  sm: w-11/12 md:w-3/5"
                                 type="text"/>
                         </div>
-
-                        <div>
+                        <div style={{marginTop: "5px", marginBottom: "5px"}}>
                             <h3 className="  text-blue-900 text-lg">
                                 Email
                             </h3>
@@ -198,7 +197,7 @@ export default function RepresentativeDetails() {
                                 className=" bg-white mt-2  text-slate-800 px-2 field-border-color rounded-lg h-10 border-2  sm: w-11/12 md:w-3/5"
                                 type="text"/>
                         </div>
-                        <div>
+                        <div style={{marginTop: "5px", marginBottom: "5px"}}>
                             <h3 className="  text-blue-900 text-lg flex">
                                 Phone <p className=' text-slate-500 text-sm mt-1 font-normal ml-2 '>(This number
                                 will be OTP verified and used for account log in)</p>
@@ -206,6 +205,13 @@ export default function RepresentativeDetails() {
                             <PhoneInput
                                 defaultCountry="ae"
                                 value={phone}
+                                disableDialCodeAndPrefix={true}
+                                showDisabledDialCodeAndPrefix={true}
+                                dialCodePreviewStyleProps={{
+                                    style: {
+                                        border: "0px"
+                                    }
+                                }}
                                 onChange={(phone, country) => {
                                     setPhone(phone);
                                     setCountryCode('+' + country.country.dialCode);
@@ -214,20 +220,19 @@ export default function RepresentativeDetails() {
                                     }))
                                 }}
                                 required
-                                className="border-neutral-200  sm: w-11/12 md:w-3/5 "
+                                className="bg-white mt-2  text-slate-800 px-2 field-border-color rounded-lg h-10 border-2  sm: w-11/12 md:w-3/5 "
                             />
 
                         </div>
-
                         <div className="flex sm:w-3/6  md:w-3/5 items-center mt-4 justify-end">
                             <button onClick={() => navigate(-1)} className="mx-8 self-center color-primary ">
                                 BACK
                             </button>
                             <button
-                                className=' justify-self-end bg-slate-400  w-40 items-center h-10 rounded-lg'>CONTINUE
+                                className=' justify-self-end bg-slate-400  w-40 items-center h-10 rounded-lg'>
+                                CONTINUE
                             </button>
                         </div>
-
                     </form>
                 </div>
             </div>
@@ -238,6 +243,7 @@ export default function RepresentativeDetails() {
             isOpen={modalIsOpen}
             style={customStyles}
             contentLabel="OTP Modal"
+            appElement={document.getElementById('root')}
         >
             <div className=' '>
                 <button onClick={() => {

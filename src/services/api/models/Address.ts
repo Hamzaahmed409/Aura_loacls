@@ -6,6 +6,7 @@ import type { Buyer } from './Buyer';
 import type { Seller } from './Seller';
 import type { User } from './User';
 export type Address = {
+    id: string;
     street: string;
     city: string;
     state: string;

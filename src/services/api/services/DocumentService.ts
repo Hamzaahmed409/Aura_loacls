@@ -6,7 +6,6 @@ import type { UploadResultDto } from '../models/UploadResultDto';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-import { DOCUMENTTYPE } from '../enums/constants';
 export class DocumentService {
     /**
      * @param formData
@@ -18,7 +17,7 @@ export class DocumentService {
             files: Array<Blob>;
             folder_name: string;
             seller_id: string;
-            document_type: DOCUMENTTYPE;
+            document_type: 'bank_statement' | 'trade_license';
             is_perfios?: boolean;
         },
     ): CancelablePromise<UploadResultDto> {
@@ -32,5 +31,4 @@ export class DocumentService {
             },
         });
     }
-    
 }

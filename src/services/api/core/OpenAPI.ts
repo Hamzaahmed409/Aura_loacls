@@ -22,7 +22,7 @@ export type OpenAPIConfig = {
 export const OpenAPI: OpenAPIConfig = {
     BASE: import.meta.env.VITE_BACKEND_IP!,
     VERSION: '0.0.1',
-    WITH_CREDENTIALS: false,
+    WITH_CREDENTIALS: true,
     CREDENTIALS: 'include',
     TOKEN: undefined,
     USERNAME: undefined,

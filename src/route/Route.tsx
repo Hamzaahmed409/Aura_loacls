@@ -2,7 +2,6 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-constant-condition */
-// @ts-nocheck 
 import   { useEffect, useState } from 'react'
 import * as Actions from '@/redux/actions/Actions'
 import AppRouter from '@/route/appRoutes/AppRoute'

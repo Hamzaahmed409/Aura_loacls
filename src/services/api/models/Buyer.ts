@@ -5,6 +5,7 @@
 import type { Address } from './Address';
 import type { UserRole } from './UserRole';
 export type Buyer = {
+    id: string;
     company_name: string;
     company_registered_name: string;
     trade_license_no: string;

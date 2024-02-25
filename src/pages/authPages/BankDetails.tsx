@@ -1,16 +1,16 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck, faFile, faXmark } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faCircleCheck, faFile, faXmark} from '@fortawesome/free-solid-svg-icons';
 import 'react-dropdown/style.css';
-import { useNavigate } from 'react-router-dom';
-import { toast } from "@/components/ui/use-toast"
-import { useState } from 'react';
-import { AuthService, DocumentService } from '@/services/api/index';
-import { DOCUMENTTYPE } from '@/services/api/enums/constants';
-export default function CompanyDetails() {
+import {useNavigate} from 'react-router-dom';
+import {toast} from "@/components/ui/use-toast"
+import {useState} from 'react';
+import {DocumentService} from '@/services/api/index';
+import {DocumentType} from "@/services/constants.ts";
+
+export default function BankDetails() {
     const navigate = useNavigate();
-    const [statementCheck, setStatementCheck] = useState(false);
-    const [selectedFile, setSelectedFile] = useState<File[]>([]);;
-    const { documentControllerUploadFiles } = DocumentService;
+    const [selectedFile, setSelectedFile] = useState<File[]>([]);
+    const {documentControllerUploadFiles} = DocumentService;
     const handleFileChange = (e: any) => {
         const file = e.target.files[0];
         if (file && file.type === 'application/pdf') {
@@ -23,29 +23,22 @@ export default function CompanyDetails() {
         let representativeDetails = JSON.parse(localStorage.getItem('representativeDetails') || '{}');
         const uploadData = {
             files: selectedFile,
-            folder_name: 'noman',
+            folder_name: DocumentType.BANK_STATEMENT,
             seller_id: representativeDetails.seller_id,
             is_perfios: true,
-            document_type: DOCUMENTTYPE.BANKSTATEMENT
+            document_type: DocumentType.BANK_STATEMENT
         };
         try {
             const response = await documentControllerUploadFiles(uploadData);
             if (response.successfulUploads) {
-                const concatenatedUrls = response?.successfulUploads?.reduce((acc: any, item: any) => {
-                    return acc + item.url + '\n'; // '\n' for a line break between each URL
-                }, '');
-
-                console.log(concatenatedUrls)
-                localStorage.setItem('bankStatmentPdf', JSON.stringify({
-                    concatenatedUrls
-                }));
                 navigate('/company-details')
             } else {
-                throw new Error('failed to upload');
+                throw new Error('Failed to upload');
             }
-        }
-        catch (error) {
-            console.log(error)
+        } catch (error) {
+            toast({
+                variant: "destructive", title: "Error!", description: "Failed to upload bank statement(s).",
+            });
         }
     };
 
@@ -57,10 +50,12 @@ export default function CompanyDetails() {
     };
     return (
         <>
-            <div className="container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-3 lg:px-0 h-screen max-md:flex bg-slate-50">
-                <div className="lg:col-span-1 px-6 md:px-10 lg:px-20 relative hidden h-full flex-col bg-muted p-4 md:p-10 text-white lg:flex">
-                    <div className="absolute inset-0 bg-white " />
-                    <div className="block z-0" >
+            <div
+                className="container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-3 lg:px-0 h-screen max-md:flex bg-slate-50">
+                <div
+                    className="lg:col-span-1 px-6 md:px-10 lg:px-20 relative hidden h-full flex-col bg-muted p-4 md:p-10 text-white lg:flex">
+                    <div className="absolute inset-0 bg-white "/>
+                    <div className="block z-0">
                         <img
                             src="/AURA.png"
                             width={100}
@@ -71,14 +66,15 @@ export default function CompanyDetails() {
                     <div className="block z-0 my-20">
                         <div className="flex my-2 ">
                             <div className="flex items-center justify-center rounded-full w-6 px-3 mx-6">
-                                <FontAwesomeIcon className='text-green-500 ' size='2x' icon={faCircleCheck} />
+                                <FontAwesomeIcon className='text-green-500 ' size='2x' icon={faCircleCheck}/>
                             </div>
                             <h1 className="text-muted-foreground font-semibold">REPRESENTATIVE DETAILS </h1>
                         </div>
                         <div className="border-l border-green-500  h-8 mx-9"></div>
 
                         <div className="flex my-2 ">
-                            <div className="flex items-center justify-center rounded-full border-color color-primary border-2 w-8 h-8 px-3 mx-5">
+                            <div
+                                className="flex items-center justify-center rounded-full border-color color-primary border-2 w-8 h-8 px-3 mx-5">
                                 <h1 className="color-primary">2</h1>
                             </div>
                             {/* Vertical Line */}
@@ -86,7 +82,8 @@ export default function CompanyDetails() {
                         </div>
                         <div className="border-l border-gray-300 h-8 mx-9"></div>
                         <div className="flex my-2">
-                            <div className="flex items-center justify-center rounded-full border-gray-300 text-blue-900 border-2 w-8 h-8 px-3 mx-5">
+                            <div
+                                className="flex items-center justify-center rounded-full border-gray-300 text-blue-900 border-2 w-8 h-8 px-3 mx-5">
                                 <h1 className="text-muted-foreground">3</h1>
                             </div>
                             {/* Vertical Line */}
@@ -95,9 +92,11 @@ export default function CompanyDetails() {
                         <div className="border-l border-gray-300 h-8  mx-9"></div>
 
                         <div className="flex my-2">
-                            <div className="flex items-center justify-center rounded-full border-gray-300 text-blue-900 border-2 w-8 h-8 px-3 mx-5">
+                            <div
+                                className="flex items-center justify-center rounded-full border-gray-300 text-blue-900 border-2 w-8 h-8 px-3 mx-5">
                                 <h1 className="text-muted-foreground">4</h1>
-                            </div>  {/* Vertical Line */}
+                            </div>
+                            {/* Vertical Line */}
                             <h1 className="color-secondary font-semibold">TERMS & CONDITIONS</h1>
                         </div>
                     </div>
@@ -119,8 +118,8 @@ export default function CompanyDetails() {
                             <h1 className="block z-0  text-blue-900 text-2xl font-semibold">
                                 Company Bank Details
                             </h1>
-                            <p className=" mt-2 text-blue-900 text-sm" >
-                                You will recive payment in bank account
+                            <p className=" mt-2 text-blue-900 text-sm">
+                                You will receive payment in bank account
                             </p>
                         </div>
                         <form onSubmit={(e) => {
@@ -130,8 +129,7 @@ export default function CompanyDetails() {
                                     variant: "destructive",
                                     title: "Please upload the pdf!",
                                 })
-                            }
-                            else {
+                            } else {
                                 pdfUpload()
 
                             }
@@ -143,14 +141,20 @@ export default function CompanyDetails() {
                                 </h3>
 
                                 <div className='flex-wrap flex  '>
-                                    <div className=' flex-wrap flex' >
+                                    <div className=' flex-wrap flex'>
                                         {
                                             selectedFile.map((e, index) => {
                                                 return (
                                                     <div className='flex items-center' key={index}>
-                                                        <div className="file-upload field-border-color rounded-lg h-32 border-neutral-200 border-2 w-36 p-2 flex  items-center justify-center m-2">
-                                                            <FontAwesomeIcon className="mr-2 h-8 color-primary" icon={faFile} />
-                                                            <h3 className="color-primary" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                        <div
+                                                            className="file-upload field-border-color rounded-lg h-32 border-neutral-200 border-2 w-36 p-2 flex  items-center justify-center m-2">
+                                                            <FontAwesomeIcon className="mr-2 h-8 color-primary"
+                                                                             icon={faFile}/>
+                                                            <h3 className="color-primary" style={{
+                                                                overflow: 'hidden',
+                                                                textOverflow: 'ellipsis',
+                                                                whiteSpace: 'nowrap'
+                                                            }}>
                                                                 {e.name}
                                                             </h3>
                                                             <button
@@ -159,7 +163,7 @@ export default function CompanyDetails() {
                                                                     removePdf(index)
                                                                 }}
                                                             >
-                                                                <FontAwesomeIcon icon={faXmark} />
+                                                                <FontAwesomeIcon icon={faXmark}/>
                                                             </button>
                                                         </div>
                                                     </div>
@@ -171,7 +175,8 @@ export default function CompanyDetails() {
 
                                     {
                                         selectedFile.length < 6 ?
-                                            <div className="file-upload field-border-color rounded-lg h-32 flex-wrap border-neutral-200 border-2  w-36 text-center m-2">
+                                            <div
+                                                className="file-upload field-border-color rounded-lg h-32 flex-wrap border-neutral-200 border-2  w-36 text-center m-2">
                                                 <input
                                                     type="file"
                                                     accept=".pdf"
@@ -183,7 +188,6 @@ export default function CompanyDetails() {
                                     }
 
 
-
                                 </div>
 
                             </div>
@@ -192,7 +196,9 @@ export default function CompanyDetails() {
                                 <button onClick={() => navigate(-1)} className=" mx-8  self-center color-primary   ">
                                     BACK
                                 </button>
-                                <button className='justify-self-end  w-40 items-center h-10  bg-slate-400  rounded-lg' >CONTINUE</button>
+                                <button
+                                    className='justify-self-end  w-40 items-center h-10  bg-slate-400  rounded-lg'>CONTINUE
+                                </button>
                             </div>
 
                         </form>

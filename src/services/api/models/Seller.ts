@@ -5,6 +5,7 @@
 import type { Address } from './Address';
 import type { UserRole } from './UserRole';
 export type Seller = {
+    id: string;
     company_name: string;
     company_registered_name: string;
     trade_license_no: string;
@@ -19,6 +20,5 @@ export type Seller = {
     registered_address_id: string;
     address: Address;
     roles: Array<UserRole>;
-    id:string;
 };
 

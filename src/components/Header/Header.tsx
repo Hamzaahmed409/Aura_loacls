@@ -1,5 +1,3 @@
-// @ts-nocheck 
-
 import { useEffect } from 'react'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import * as Actions from '@/redux/actions/Actions'
@@ -41,7 +39,7 @@ function Header(props: { logout: () => void; }) {
           <button onClick={() => { navigate('/login') }} style={loginButtonStyle} className='bg-inherit text-blue-950'>
             Login
           </button>
-          <button style={getStartedButtonStyle} className='button text-white'>
+          <button onClick={() => { navigate('/login') }} style={getStartedButtonStyle} className='button text-white'>
             Get started
           </button>
         </div>
