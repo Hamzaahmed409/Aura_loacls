@@ -14,14 +14,15 @@ export default function CompanyDetails() {
     const {userControllerSignup} = UserService
     const navigate = useNavigate();
     const [uploadStatus, setUploadStatus] = useState(false);
+    const [agrement, setAgrement] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File>(undefined);
     const [details, setDetails] = useState({
         companyName: '',
         dateOfIncorporation: '',
-        turnover: '',
-        currency: '',
-        category: '',
-        avgInvoices: '',
+        turnover: annualTurnOver[0],
+        currency: currencyOptions[0],
+        category: categoryOption[0],
+        avgInvoices: avgInvoices[0],
     });
 
     const handleFileChange = (e) => {
@@ -211,7 +212,7 @@ export default function CompanyDetails() {
                                     className="file-upload field-border-color rounded-lg h-10 border-neutral-200 border-2 sm: w-11/12 md:w-3/5 bg-white mt-2  text-slate-800 px-2 field-border-color rounded-lg h-10 border-2 sm: w-11/12 md:w-3/5">
 
                                     <input
-                                        required
+                                        
                                         type="file"
                                         accept=".pdf"
                                         onChange={handleFileChange}
@@ -297,6 +298,9 @@ export default function CompanyDetails() {
                                 <div className="flex w-full bg-white">
                                     <input
                                         required
+                                        onClick={()=>{
+                                            setAgrement(!agrement)
+                                        }}
                                         type="checkbox" id="horns" name="horns"/>
                                     <p className="  text-sm text-blue-950 px-4">
                                         I give my consent to Aura Networks FZ to pull my credit report from Al Etihad
@@ -309,7 +313,7 @@ export default function CompanyDetails() {
                                     BACK
                                 </button>
                                 <button
-                                    className=' justify-self-end w-40 items-center h-10  bg-slate-400  rounded-lg'
+                                    className={` justify-self-end w-40 items-center h-10  ${agrement ? 'bg-blue-700': 'bg-slate-400' }   rounded-lg`}
                                 >CONTINUE
                                 </button>
                             </div>

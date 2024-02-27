@@ -27,7 +27,6 @@ export default function SideMenu() {
         backgroundColor={'white'}
         rootStyles={{
           [`.${sidebarClasses.container}`]: {
-
             height: '100vh',
             border: '0',
             borderRadius: '0px 20px 20px 0px',
@@ -36,12 +35,7 @@ export default function SideMenu() {
         }}
         toggled={true}
       >
-        {/* <div onClick={() => {
-          setSideBarCollapsed(!sideBarCollapsed)
-        }} className='mb-16 mt-8 flex items-center justify-center cursor-pointer'>
-          {<BarChart />}
-          <h4 className='text-center font-normal text-2xl ml-3'>{sideBarCollapsed ? null : 'Aura'}</h4>
-        </div> */}
+      
         <Menu
           closeOnClick={true}
           menuItemStyles={{
@@ -70,6 +64,7 @@ export default function SideMenu() {
                 <MenuItem onClick={() => {
             // navigate(`/dashboard`);
           }}
+          
             icon={<BarChart />} className={`text-base  text-gray-700 font-medium mb-6 m-auto !h-12`}> Jobs </MenuItem>
             
 

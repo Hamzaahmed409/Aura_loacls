@@ -1,16 +1,16 @@
-import {PhoneInput} from 'react-international-phone';
+import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
-import {useState} from "react";
+import { useState } from "react";
 import 'react-dropdown/style.css';
-import {useNavigate} from 'react-router-dom';
-import {toast} from '@/components/ui/use-toast';
-import {VerifySignupDto} from "@/services/api/models/VerifySignupDto";
-import {OtpDto} from "@/services/api/models/OtpDto";
-import {AuthService} from "@/services/api/services/AuthService";
+import { useNavigate } from 'react-router-dom';
+import { toast } from '@/components/ui/use-toast';
+import { VerifySignupDto } from "@/services/api/models/VerifySignupDto";
+import { OtpDto } from "@/services/api/models/OtpDto";
+import { AuthService } from "@/services/api/services/AuthService";
 import OTPInput from "otp-input-react";
 import Modal from 'react-modal'
 
-const {authControllerSendOtp, authControllerVerifyMobile} = AuthService;
+const { authControllerSendOtp, authControllerVerifyMobile } = AuthService;
 
 const customStyles = {
     content: {
@@ -68,7 +68,6 @@ export default function RepresentativeDetails() {
             });
         }
     }
-
     async function sendOtp() {
         const otpDto: OtpDto = {
             country_code: countryCode, mobile_number: phone.slice(countryCode.length),
@@ -95,7 +94,7 @@ export default function RepresentativeDetails() {
             className="container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-3 lg:px-0 h-screen max-md:flex bg-slate-50">
             <div
                 className="lg:col-span-1 px-6 md:px-10 lg:px-20 relative hidden h-full flex-col bg-muted p-4 md:p-10 text-white lg:flex">
-                <div className="absolute inset-0 bg-white "/>
+                <div className="absolute inset-0 bg-white " />
                 <div className="block z-0">
                     <img
                         src="/AURA.png"
@@ -159,7 +158,7 @@ export default function RepresentativeDetails() {
                         e.preventDefault();
                         sendOtp()
                     }}>
-                        <div style={{marginBottom: "10px"}}>
+                        <div style={{ marginBottom: "10px" }}>
                             <h1 className="block z-0  text-blue-900 text-2xl font-semibold">
                                 Representative Details
                             </h1>
@@ -167,7 +166,7 @@ export default function RepresentativeDetails() {
                                 This person will be our point of contact for the account
                             </p>
                         </div>
-                        <div style={{marginTop: "5px", marginBottom: "5px"}}>
+                        <div style={{ marginTop: "5px", marginBottom: "5px" }}>
                             <h3 className="  text-blue-900 text-lg">
                                 Full Name
                             </h3>
@@ -180,9 +179,9 @@ export default function RepresentativeDetails() {
                                 required
                                 placeholder=" Input representative full name"
                                 className=" bg-white mt-2  text-slate-800 px-2 field-border-color rounded-lg h-10 border-2  sm: w-11/12 md:w-3/5"
-                                type="text"/>
+                                type="text" />
                         </div>
-                        <div style={{marginTop: "5px", marginBottom: "5px"}}>
+                        <div style={{ marginTop: "5px", marginBottom: "5px" }}>
                             <h3 className="  text-blue-900 text-lg">
                                 Email
                             </h3>
@@ -195,12 +194,12 @@ export default function RepresentativeDetails() {
                                 placeholder=" Input representative email"
                                 required
                                 className=" bg-white mt-2  text-slate-800 px-2 field-border-color rounded-lg h-10 border-2  sm: w-11/12 md:w-3/5"
-                                type="text"/>
+                                type="text" />
                         </div>
-                        <div style={{marginTop: "5px", marginBottom: "5px"}}>
+                        <div style={{ marginTop: "5px", marginBottom: "5px" }}>
                             <h3 className="  text-blue-900 text-lg flex">
                                 Phone <p className=' text-slate-500 text-sm mt-1 font-normal ml-2 '>(This number
-                                will be OTP verified and used for account log in)</p>
+                                    will be OTP verified and used for account log in)</p>
                             </h3>
                             <PhoneInput
                                 defaultCountry="ae"
@@ -229,7 +228,7 @@ export default function RepresentativeDetails() {
                                 BACK
                             </button>
                             <button
-                                className=' justify-self-end bg-slate-400  w-40 items-center h-10 rounded-lg'>
+                                className={`justify-self-end ${representativeDetails.fullName.length > 2 && representativeDetails.email.length > 10 && phone.length > 12 ? 'bg-blue-700' : 'bg-slate-400'}   w-40 items-center h-10 rounded-lg`}>
                                 CONTINUE
                             </button>
                         </div>
@@ -269,7 +268,7 @@ export default function RepresentativeDetails() {
                     <div className='flex flex-col items-center mt-8'>
 
                         <OTPInput className='text-black ' placeholder="****" value={OTP} onChange={setOTP} autoFocus
-                                  OTPLength={4} otpType="number" secure/>
+                            OTPLength={4} otpType="number" secure />
                         <button className='mt-2 color-primary'>Resend Code</button>
                     </div>
 

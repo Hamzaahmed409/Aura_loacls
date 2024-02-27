@@ -29,7 +29,7 @@ function Route(props: { setUserAuth: (arg0: { user: any; isDashboard: any }) => 
     <>
       <div>
         {
-          props.userAuth ? <AuthRouter /> : <AppRouter />  
+          !props.userAuth ? <AuthRouter /> : <AppRouter />  
         }
         
       </div>

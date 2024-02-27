@@ -133,10 +133,8 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
                         className="border-neutral-200  sm: w-11/12 md:w-3/5 "
                     />
                 </div>
-
                 <div className="grid gap-3 my-2">
-
-                    <Button className=' w-40 h-10 bg-slate-400 rounded' onClick={() => {
+                    <Button className={`w-40 h-10 ${phoneNumber.length >12 ? 'bg-blue-700' : 'bg-slate-400'}  rounded` } onClick={() => {
                         onSubmit()
                     }} disabled={isLoading}>
                         {isLoading && (
@@ -157,9 +155,7 @@ function AuthForm(props: { setUserAuth: (arg0: { user: { location: never[]; }; i
                 <div className=' '>
                     <button onClick={() => {
                         setModalIsOpen(false)
-
                     }} className='absolute top-6 text-2xl right-8 text-black'>
-
                         <img
                             src="/public/close.png"
                             width={16}
