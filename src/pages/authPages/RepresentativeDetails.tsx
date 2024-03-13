@@ -1,6 +1,6 @@
 import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import 'react-dropdown/style.css';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
@@ -19,7 +19,7 @@ const customStyles = {
         right: 'auto',
         bottom: 'auto',
         marginRight: '-50%',
-        width: '30%',
+        width: '32%',
         transform: 'translate(-50%, -50%)',
         backgroundColor: '#FFFFFF',
         zIndex: 1,
@@ -69,6 +69,8 @@ export default function RepresentativeDetails() {
         }
     }
     async function sendOtp() {
+        setModalIsOpen(true);
+
         const otpDto: OtpDto = {
             country_code: countryCode, mobile_number: phone.slice(countryCode.length),
         };
@@ -81,12 +83,32 @@ export default function RepresentativeDetails() {
                 })
             }
         } catch (error) {
-            setModalIsOpen(false);
+            // setModalIsOpen(false); 
             toast({
                 variant: "destructive", title: "Error!", description: error.body.message,
             });
         }
     }
+    const [time, setTime] = useState(30);
+    const [seconds, setSeconds] = useState(30);
+    const [resendButton, setResendButton] = useState(false);
+    useEffect(() => {
+        if (modalIsOpen && !resendButton) {
+          const interval = setInterval(() => {
+            setSeconds((prevSeconds) => {
+              if (prevSeconds === 0) {
+                clearInterval(interval);
+                setResendButton(true);
+                return 0;
+              } else {
+                return prevSeconds - 1;
+              }
+            });
+          }, 1000);
+      
+          return () => clearInterval(interval);
+        }
+      }, [modalIsOpen, resendButton]);
 
 
     return (<>
@@ -228,6 +250,8 @@ export default function RepresentativeDetails() {
                                 BACK
                             </button>
                             <button
+                                onClick={() => {
+                                }}
                                 className={`justify-self-end ${representativeDetails.fullName.length > 2 && representativeDetails.email.length > 10 && phone.length > 12 ? 'bg-blue-700' : 'bg-slate-400'}   w-40 items-center h-10 rounded-lg`}>
                                 CONTINUE
                             </button>
@@ -244,10 +268,11 @@ export default function RepresentativeDetails() {
             contentLabel="OTP Modal"
             appElement={document.getElementById('root')}
         >
-            <div className=' '>
+            <div className=''>
                 <button onClick={() => {
                     setModalIsOpen(false)
-
+                    setResendButton(true),
+                    setSeconds(30)
                 }} className='absolute top-6 text-2xl right-8 text-black'>
 
                     <img
@@ -261,15 +286,30 @@ export default function RepresentativeDetails() {
                 <div className='container relative flex flex-col items-center'>
 
                     <h1 className='mb-4 text-2xl font-semibold text-black text-center'>Enter Verification Code</h1>
-                    <p className='text-center text-black'>Enter the 4 digit verification code sent to your
-                        mobile</p>
+                    <p className='text-center text-black'>Enter the 4 digit verification code sent to your mobile</p>
                     <p className='text-center text-black'>number *********{phone.slice(-3)}</p>
 
-                    <div className='flex flex-col items-center mt-8'>
-
+                    <div className='flex flex-col items-center mt-10'>
                         <OTPInput className='text-black ' placeholder="****" value={OTP} onChange={setOTP} autoFocus
                             OTPLength={4} otpType="number" secure />
-                        <button className='mt-2 color-primary'>Resend Code</button>
+                            <div className=' mt-8'>
+
+                             {
+                            resendButton ?
+                                <button onClick={() => {
+                                    setResendButton(false)
+                                    setSeconds( time + 15)
+                                    setTime(time + 15)
+                                }} className='mt-2 color-primary'>Resend Code</button>
+                                : 
+                                <div className='flex py-2'>
+                                    <p className='text-base text-black pr-2'>Remaining time: </p>
+                                    <p className='text-blue-700 text-base'>{seconds}</p>
+                                    </div>
+                        }
+                            </div>
+
+
                     </div>
 
                     <button onClick={() => {

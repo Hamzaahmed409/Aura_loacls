@@ -5,8 +5,8 @@ import {  faBell } from '@fortawesome/free-regular-svg-icons';
 function Nav() {
   return (
     <div>
-      <div className='bg-white '>
-        <div className='flex justify-between items-center h-20 container'>
+      {/* <div className='bg-white   h-20 '> */}
+        {/* <div className='flex justify-between items-center container'>
           <div>
             <img
               src="/AURA.png"
@@ -20,8 +20,8 @@ function Nav() {
             <FontAwesomeIcon className="mr-2 h-6 w-6 text-blue-700" icon={faBell}   />
             <h3 className=" text-blue-700 text-base  font-bold">NextSoft Solution</h3>
           </div>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
     </div>
   )
 }

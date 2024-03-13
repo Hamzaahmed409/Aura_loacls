@@ -1,24 +1,34 @@
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faCircleCheck, faFile, faXmark} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck, faFile, faXmark } from '@fortawesome/free-solid-svg-icons';
 import 'react-dropdown/style.css';
-import {useNavigate} from 'react-router-dom';
-import {toast} from "@/components/ui/use-toast"
-import {useState} from 'react';
-import {DocumentService} from '@/services/api/index';
-import {DocumentType} from "@/services/constants.ts";
-
+import { useNavigate } from 'react-router-dom';
+import { toast } from "@/components/ui/use-toast"
+import { useState } from 'react';
+import { DocumentService } from '@/services/api/index';
+import { DocumentType } from "@/services/constants.ts";
+import { FileUploader } from "react-drag-drop-files";
 export default function BankDetails() {
+    const [file, setFile] = useState(null);
+  
+
+    const fileTypes = ["PDF"];
     const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState<File[]>([]);
-    const {documentControllerUploadFiles} = DocumentService;
-    const handleFileChange = (e: any) => {
-        const file = e.target.files[0];
-        if (file && file.type === 'application/pdf') {
-            setSelectedFile([...selectedFile, file]);
-        } else {
-            alert('Please select a valid PDF file.');
-        }
+    const { documentControllerUploadFiles } = DocumentService;
+    // const handleFileChange = (e: any) => {
+    //     const file = e.target.files[0];
+    //     if (file && file.type === 'application/pdf') {
+    //         setSelectedFile([...selectedFile, file]);
+    //     } else {
+    //         alert('Please select a valid PDF file.');
+    //     }
+    // };
+    const handleChange = (file: any) => {
+        const data = Object.values(file)
+        setSelectedFile([...selectedFile, ...data]);
+
     };
+
     const pdfUpload = async () => {
         let representativeDetails = JSON.parse(localStorage.getItem('representativeDetails') || '{}');
         const uploadData = {
@@ -41,7 +51,9 @@ export default function BankDetails() {
             });
         }
     };
-
+console.log('===============selectedFile=====================');
+console.log(selectedFile);
+console.log('=============selectedFile======================');
 
     const removePdf = (indexToRemove: any) => {
         const updatedArray = [...selectedFile];
@@ -54,7 +66,7 @@ export default function BankDetails() {
                 className="container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-3 lg:px-0 h-screen max-md:flex bg-slate-50">
                 <div
                     className="lg:col-span-1 px-6 md:px-10 lg:px-20 relative hidden h-full flex-col bg-muted p-4 md:p-10 text-white lg:flex">
-                    <div className="absolute inset-0 bg-white "/>
+                    <div className="absolute inset-0 bg-white " />
                     <div className="block z-0">
                         <img
                             src="/AURA.png"
@@ -66,7 +78,7 @@ export default function BankDetails() {
                     <div className="block z-0 my-20">
                         <div className="flex my-2 ">
                             <div className="flex items-center justify-center rounded-full w-6 px-3 mx-6">
-                                <FontAwesomeIcon className='text-green-500 ' size='2x' icon={faCircleCheck}/>
+                                <FontAwesomeIcon className='text-green-500 ' size='2x' icon={faCircleCheck} />
                             </div>
                             <h1 className="text-muted-foreground font-semibold">REPRESENTATIVE DETAILS </h1>
                         </div>
@@ -140,54 +152,57 @@ export default function BankDetails() {
                                     Upload 6 months bank statement (.pdf only)
                                 </h3>
 
-                                <div className='flex-wrap flex  '>
-                                    <div className=' flex-wrap flex'>
-                                        {
-                                            selectedFile.map((e, index) => {
-                                                return (
-                                                    <div className='flex items-center' key={index}>
-                                                        <div
-                                                            className="file-upload field-border-color rounded-lg h-32 border-neutral-200 border-2 w-36 p-2 flex  items-center justify-center m-2">
-                                                            <FontAwesomeIcon className="mr-2 h-8 color-primary"
-                                                                             icon={faFile}/>
-                                                            <h3 className="color-primary" style={{
-                                                                overflow: 'hidden',
-                                                                textOverflow: 'ellipsis',
-                                                                whiteSpace: 'nowrap'
-                                                            }}>
-                                                                {e.name}
-                                                            </h3>
-                                                            <button
-                                                                className='text-black ml-2'
-                                                                onClick={() => {
-                                                                    removePdf(index)
-                                                                }}
-                                                            >
-                                                                <FontAwesomeIcon icon={faXmark}/>
-                                                            </button>
+                                <div>
+                                    <FileUploader multiple={true} handleChange={handleChange} name="file" types={fileTypes} />
+                                    <div className='flex-wrap flex  '>
+                                        <div className=' flex-wrap flex'>
+                                            {
+                                                selectedFile.map((e, index) => {
+                                                    return (
+                                                        <div className='flex items-center' key={index}>
+                                                            <div
+                                                                className="file-upload field-border-color rounded-lg h-32 border-neutral-200 border-2 w-36 p-2 flex  items-center justify-center m-2">
+                                                                <FontAwesomeIcon className="mr-2 h-8 color-primary"
+                                                                    icon={faFile} />
+                                                                <h3 className="color-primary" style={{
+                                                                    overflow: 'hidden',
+                                                                    textOverflow: 'ellipsis',
+                                                                    whiteSpace: 'nowrap'
+                                                                }}>
+                                                                    {e.name}
+                                                                </h3>
+                                                                <button
+                                                                    className='text-black ml-2'
+                                                                    onClick={() => {
+                                                                        removePdf(index)
+                                                                    }}
+                                                                >
+                                                                    <FontAwesomeIcon icon={faXmark} />
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                )
-                                            })
-                                        }
+                                                    )
+                                                })
+                                            }
+
+                                        </div>
+
+                                        {/* {
+                                            selectedFile.length < 6 ?
+                                                <div
+                                                    className="file-upload field-border-color rounded-lg h-32 flex-wrap border-neutral-200 border-2  w-36 text-center m-2">
+                                                    <input
+                                                        type="file"
+                                                        accept=".pdf"
+                                                        onChange={handleFileChange}
+                                                        className="  "
+                                                    />
+                                                    <h3 className=" text-muted-foreground mt-10 ">Click to upload pdf</h3>
+                                                </div> : null
+                                        } */}
+
 
                                     </div>
-
-                                    {
-                                        selectedFile.length < 6 ?
-                                            <div
-                                                className="file-upload field-border-color rounded-lg h-32 flex-wrap border-neutral-200 border-2  w-36 text-center m-2">
-                                                <input
-                                                    type="file"
-                                                    accept=".pdf"
-                                                    onChange={handleFileChange}
-                                                    className="  "
-                                                />
-                                                <h3 className=" text-muted-foreground mt-10 ">Click to upload pdf</h3>
-                                            </div> : null
-                                    }
-
-
                                 </div>
 
                             </div>
