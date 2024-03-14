@@ -29,7 +29,7 @@ function DashBoardRewamp() {
     ]
     const SummaryView = (props: any) => {
         return (
-            <div className=' flex border border-gray-300  h-18 w-1/3 mr-6 py-2 px-4 rounded-md'>
+            <div className=' flex border  border-gray-300  h-18 w-1/3 mr-6 py-2 px-4 rounded-md'>
                 <div className='  p-2 h-10 rounded-md text-center button items-center text-center mt-2'>
                     <FontAwesomeIcon className=" h-5 w-5 text-white" icon={props.icon} />
                 </div>
@@ -62,7 +62,7 @@ function DashBoardRewamp() {
         )
     }
     return (
-        <div className=' container h-fit w-full'>
+        <div className=' container h-fit w-full bg-white'>
             <div className=' flex justify-between'>
                 <div>
                     <h1 className='text-2xl text-black font-semibold'>Welcome, Olivia</h1>
