@@ -12,6 +12,7 @@ export default function DashboardLayout() {
                 <SideMenu />
                    <Outlet />
                 </div>
+                {/* footer */}
             </div>
         </div>
     );

@@ -3,9 +3,14 @@ import { Sidebar, Menu, MenuItem, sidebarClasses } from 'react-pro-sidebar';
 import { BarChart } from '../../assets/sideBarIcons/BarChat';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar"
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 export default function SideMenu() {
   const navigate = useNavigate();
@@ -23,16 +28,15 @@ export default function SideMenu() {
 
   const [sideBarCollapsed, setSideBarCollapsed] = useState(false)
   return (
-    <div className='nav-sidebar'>
+    <div className='nav-sidebar h-full'>
       <div className=' p-2'>
-
-         <img
-              src="/AURA.png"
-              width={102}
-              height={30}
-              alt="Authentication"
-              className="hidden dark:block mb-2"
-            />
+        <img
+          src="/AURA.png"
+          width={102}
+          height={30}
+          alt="Authentication"
+          className="hidden dark:block mb-2"
+        />
       </div>
 
       <Sidebar
@@ -77,7 +81,7 @@ export default function SideMenu() {
         >
           <MenuItem
             onClick={() => {
-              navigate(`/dashboard`);
+              navigate(`/dashboard/rewamp`);
             }} icon={<BarChart />} className={'bg-gradient-to-r0 text-base font-medium  text-gray-700 m-auto rounded-xl   !h-12 hover:opacity-90' + (location.pathname != '/members' ? 'from-org-100 to-org-50' : '')}>Dashboard </MenuItem>
 
 
@@ -97,24 +101,37 @@ export default function SideMenu() {
           }}
             icon={<BarChart />} className={`text-base font-medium  m-auto text-gray-700 !h-12`}> Buyers </MenuItem>
 
-          <div className=' absolute bottom-40'>
+          <div className=' absolute bottom-0'>
             <MenuItem onClick={() => {
-              // navigate(`/dashboard/${locationId}/members`);
             }}
               icon={<BarChart />} className={`text-base font-medium  m-auto text-gray-700 !h-12`}> Support </MenuItem>
-
-
             <MenuItem onClick={() => {
-              // navigate(`/dashboard/${locationId}/members`);
             }}
               icon={<BarChart />} className={`text-base font-medium  m-auto text-gray-700 !h-12`}> Settings </MenuItem>
+              
+            <div className=' mt-4  mx-2  py-4 px-4 w-full rounded bg-slate-100'>
+              <h1 className='text-black text-base font-medium '>New Tentures Honinor</h1>
+              <p className='text-black text-xs  '> Check out the new dashboard view. Pages now load</p>
+              <img src={'https://img.freepik.com/free-photo/worker-reading-news-with-tablet_1162-83.jpg?t=st=1710700377~exp=1710703977~hmac=70b07f626178bf06af86997516a1d68d7331916d5f1bad276449e8222470e291&w=1060'} className=' mt-2  rounded-sm' />
 
+            </div>
+
+            <div className=' mt-14 p-2 rounded-md border-gray-400  bg-slate-100  flex justify-between'>
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <div>
+                <h1 className='text-black text-sm font-medium '>Glauon NiyC</h1>
+                <p className='text-black text-xs  '>Glauon@gmail.com</p>
+              </div>
+              <div>
+                <FontAwesomeIcon className=" h-4 w-4 mt-3 text-gray-400" icon={faRightFromBracket} />
+              </div>
+            </div>
           </div>
-
-
         </Menu>
-
       </Sidebar>
-    </div>
+    </div >
   )
 }

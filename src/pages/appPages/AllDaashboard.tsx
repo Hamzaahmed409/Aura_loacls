@@ -66,7 +66,6 @@ export default function AllDaashboard() {
                         + Add new Job
                     </button>
                 </div>
-
             </div>
         </div>
     )
