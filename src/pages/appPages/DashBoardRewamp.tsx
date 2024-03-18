@@ -1,30 +1,26 @@
-import React from 'react'
-// import '../../styles/styles.css'
 import ProgressBar from "@ramonak/react-progress-bar";
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWarning, faSearch, faHouse } from '@fortawesome/free-solid-svg-icons';
+import { faWarning, faSearch, faHouse , faArrowRight , faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 function DashBoardRewamp() {
     const invoices = [
-        {
-            jobName: "INV001",
-            Buyer: "Xyz",
-            estCompletion: "xyv",
-            grossAmount: "123 $",
-            aureFee: "123 $",
-            netAmount: "123 $",
-            Status: 'true'
-        },
+        // {
+        //     jobName: "INV001",
+        //     Buyer: "Xyz",
+        //     estCompletion: "xyv",
+        //     grossAmount: "123 $",
+        //     aureFee: "123 $",
+        //     netAmount: "123 $",
+        //     Status: 'true'
+        // },
 
     ]
     const blog = [{
@@ -76,15 +72,15 @@ function DashBoardRewamp() {
             </div>
         )
     }
-
     const Blog = (props) => {
         return (
-            <div className=' mt-4  mx-2  py-4 px-4 w-1/3 rounded bg-slate-100'>
-
-                <img src={props.items.image} className=' h-64 w-70 rounded-sm' />
+            <div className=' mt-4 mx-2 py-4 px-4 w-1/3 rounded'>
+                <img src={props.items.image} className=' h-64 w-full rounded-sm' />
+                <div  className=" flex justify-between mt-2">
                 <h1 className='text-black text-2xl font-medium '>{props.items.title}</h1>
-                <p className='text-black text-sm  '>{props.items.description}</p>
-
+                <FontAwesomeIcon className=" h-5 w-5 rotate-[-45deg]   text-black" icon={faArrowRight} />
+                </div>
+                <p className='text-black text-sm   w-10/12 '>{props.items.description}</p>
             </div>
         )
     }
@@ -108,7 +104,6 @@ function DashBoardRewamp() {
                             <h1 className='text-lg text-black font-semibold'>You've almost there</h1>
                             <div className=' rounded-2xl bg-red-100 h-6 px-4 mt-1 mx-2 border border-red-600'>
                                 <p className='text-sm text-red-500 '>Important</p>
-
                             </div>
                         </div>
                         <p className=' text-sm  text-gray-600 mt-2'>Manage your job, client & money with Aura</p>
@@ -123,7 +118,6 @@ function DashBoardRewamp() {
                     <DetailCard title={'Company bank details'} details={"This helps us understand your company's financial"} />
                     <DetailCard title={'Company bank details'} details={"This helps us understand your company's financial"} />
                     <DetailCard title={'Company bank details'} details={"This helps us understand your company's financial"} />
-
                 </div>
             </div>
 
@@ -133,14 +127,12 @@ function DashBoardRewamp() {
                 <SummaryView icon={faHouse} title={'Total payout process'} total={'AED 0'} />
             </div>
             <div className='mb-10 flex flex-col justify-between'>
-
                 <div className=''>
-
                     <div className=' flex justify-between mt-6'>
                         <h2 className=' text-black mt-4 mb-4 font-semibold'>
                             Your job list
                         </h2>
-                        <div className=' flex border-2 rounded-md border-gray-200  h-8 items-center px-2'>
+                        <div className=' flex border-2 rounded-md border-gray-200  h-10 items-center px-2'>
                             <FontAwesomeIcon className=" h-5 w-5 text-gray-400" icon={faSearch} />
                             <input
                                 required
@@ -150,8 +142,8 @@ function DashBoardRewamp() {
                             />
                         </div>
                     </div>
-
-                    <div className='border rounded-bl rounded-br w-full border-gray-200 min-h-96'>
+                    <div className='border rounded-bl rounded-br w-full border-gray-200   min-h-96'>
+                    {/* <div className={`border rounded-bl rounded-br w-full border-gray-200 ${invoices.length < 1 ? 'min-h-96' : 'min-h-96'}`}> */}
                         <Table className=''>
                             <div className='h-96 w-full'>
                                 <TableHeader className='w-full'>
@@ -183,10 +175,10 @@ function DashBoardRewamp() {
                         </Table>
 
                         {invoices.length === 0 ? (
-                            <div className=' m-20 text-center  '>
-                                <div className=''>
+                            <div className=' mb-20 text-center  '>
+                                <div className=' '>
                                     <img
-                                        src='../../../public/undraw_add_notes_re_ln36 1.png'
+                                        src='../../../public/Cloud.png'
                                         className=' w-30 block mx-auto'
                                     />
                                 </div>
