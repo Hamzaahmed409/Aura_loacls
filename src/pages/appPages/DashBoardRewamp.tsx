@@ -178,7 +178,7 @@ function DashBoardRewamp() {
                             <div className=' mb-20 text-center  '>
                                 <div className=' '>
                                     <img
-                                        src='../../../public/Cloud.png'
+                                        src='../../../public/Flies.svg'
                                         className=' w-30 block mx-auto'
                                     />
                                 </div>
