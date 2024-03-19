@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/avatar"
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faRightFromBracket, faGear } from '@fortawesome/free-solid-svg-icons';
 
 export default function SideMenu() {
   const navigate = useNavigate();
@@ -82,33 +82,68 @@ export default function SideMenu() {
           <MenuItem
             onClick={() => {
               navigate(`/dashboard/rewamp`);
-            }} icon={<BarChart />} className={'bg-gradient-to-r0 text-base font-medium  text-gray-700 m-auto rounded-xl   !h-12 hover:opacity-90' + (location.pathname != '/members' ? 'from-org-100 to-org-50' : '')}>Dashboard </MenuItem>
+            }}
+            className={'bg-gradient-to-r0 text-base font-medium  text-gray-700 m-auto rounded-xl  flex  !h-12 hover:opacity-90' + (location.pathname != '/members' ? 'from-org-100 to-org-50' : '')}>
+            <div className=' flex '>
+              <img src="../../../public/home.svg" className=' mr-2' />
+              <h1>Dashboard</h1>
+            </div>
+
+          </MenuItem>
 
 
           <MenuItem onClick={() => {
             // navigate(`/dashboard`);
           }}
-            icon={<BarChart />} className={`text-base  text-gray-700 font-medium  m-auto !h-12`}> Jobs </MenuItem>
+            className={`text-base  text-gray-700 font-medium  m-auto !h-12`}>
+
+            <div className=' flex '>
+              <img src="../../../public/layers-three-01.svg" className=' mr-2' />
+              <h1 className='text-gray-200'>Jobs</h1>
+            </div>
+          </MenuItem>
 
 
           <MenuItem onClick={() => {
             // navigate(`/dashboard/${locationId}/members`);
           }}
-            icon={<BarChart />} className={`text-base font-medium  m-auto text-gray-700 !h-12`}> Reportings </MenuItem>
+            className={`text-base font-medium  m-auto text-gray-700 !h-12`}>
+            <div className=' flex '>
+              <img src="../../../public/pie-chart-03.svg" className=' mr-2' />
+              <h1 className='text-gray-200'>Reportings</h1>
+            </div>
+          </MenuItem>
 
           <MenuItem onClick={() => {
             // navigate(`/dashboard/${locationId}/members`);
           }}
-            icon={<BarChart />} className={`text-base font-medium  m-auto text-gray-700 !h-12`}> Buyers </MenuItem>
+
+            className={`text-base font-medium  m-auto text-gray-700 !h-12`}>
+            <div className=' flex '>
+              <img src="../../../public/pie-chart-03.svg" className=' mr-2' />
+              <h1 className='text-gray-200'>Buyers</h1>
+            </div>
+          </MenuItem>
 
           <div className=' absolute bottom-0'>
             <MenuItem onClick={() => {
             }}
-              icon={<BarChart />} className={`text-base font-medium  m-auto text-gray-700 !h-12`}> Support </MenuItem>
+              className={`text-base font-medium  m-auto text-gray-700 !h-12`}>
+              <div className=' flex '>
+                <img src="../../../public/life-buoy-01.svg" className=' mr-2' />
+                <h1>Support</h1>
+              </div>
+            </MenuItem>
             <MenuItem onClick={() => {
             }}
-              icon={<BarChart />} className={`text-base font-medium  m-auto text-gray-700 !h-12`}> Settings </MenuItem>
-              
+              className={`text-base font-medium  m-auto text-gray-700 !h-12`}>
+
+              <div className=' flex '>
+                <FontAwesomeIcon className=" h-5 w-5  mr-2 text-gray-200" icon={faGear} />
+                <h1 className='text-gray-200'>Settings</h1>
+              </div>
+               </MenuItem>
+
             <div className=' mt-4  mx-2  py-4 px-4 w-full rounded bg-slate-100'>
               <h1 className='text-black text-base font-medium '>New Tentures Honinor</h1>
               <p className='text-black text-xs  '> Check out the new dashboard view. Pages now load</p>
