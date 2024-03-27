@@ -28,7 +28,7 @@ export default function SideMenu() {
 
   const [sideBarCollapsed, setSideBarCollapsed] = useState(false)
   return (
-    <div className='nav-sidebar h-full'>
+    <div className='nav-sidebar h-max'>
       <div className=' p-2'>
         <img
           src="/AURA.png"

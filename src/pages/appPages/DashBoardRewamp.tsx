@@ -144,8 +144,8 @@ function DashBoardRewamp() {
                     </div>
                     <div className='border rounded-bl rounded-br w-full border-gray-200   min-h-96'>
                     {/* <div className={`border rounded-bl rounded-br w-full border-gray-200 ${invoices.length < 1 ? 'min-h-96' : 'min-h-96'}`}> */}
-                        <Table className=''>
-                            <div className='h-96 w-full'>
+                        <Table className=''> 
+                            <div className={invoices.length > 0 ? 'h-96 w-full' : ' h-56 w-full' }>
                                 <TableHeader className='w-full'>
                                     <TableRow className='border rounded-tl-md rounded-tr-md border-gray-200 h-10'>
                                         <TableHead className="w-2/12">Job name</TableHead>
