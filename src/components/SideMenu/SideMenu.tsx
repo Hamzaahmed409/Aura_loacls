@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Sidebar, Menu, MenuItem, sidebarClasses } from 'react-pro-sidebar';
-import { BarChart } from '../../assets/sideBarIcons/BarChat';
+import { Sidebar, Menu, MenuItem, sidebarClasses } from 'react-pro-sidebar'; 
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import {
@@ -15,20 +14,20 @@ import { faSearch, faRightFromBracket, faGear } from '@fortawesome/free-solid-sv
 export default function SideMenu() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [locationId, setLocationId] = useState('')
+  // const [locationId, setLocationId] = useState('')
 
-  useEffect(() => {
-    let location = localStorage.getItem('locationId') ?? null;
-    location = JSON.parse(location as string);
+  // useEffect(() => {
+  //   let location = localStorage.getItem('locationId') ?? null;
+  //   location = JSON.parse(location as string);
 
-    if (location !== null) {
-      setLocationId(location);
-    }
-  }, [])
+  //   if (location !== null) {
+  //     setLocationId(location);
+  //   }
+  // }, [])
 
   const [sideBarCollapsed, setSideBarCollapsed] = useState(false)
   return (
-    <div className='nav-sidebar h-max'>
+    <div className='nav-sidebar h-fit'>
       <div className=' p-2'>
         <img
           src="/AURA.png"
@@ -125,7 +124,7 @@ export default function SideMenu() {
             </div>
           </MenuItem>
 
-          <div className=' absolute bottom-0'>
+          <div className='  '>
             <MenuItem onClick={() => {
             }}
               className={`text-base font-medium  m-auto text-gray-700 !h-12`}>
