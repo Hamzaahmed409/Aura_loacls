@@ -124,7 +124,7 @@ export default function SideMenu() {
             </div>
           </MenuItem>
 
-          <div className='  '>
+          <div className=' mt-32 '>
             <MenuItem onClick={() => {
             }}
               className={`text-base font-medium  m-auto text-gray-700 !h-12`}>
